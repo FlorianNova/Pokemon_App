@@ -1,34 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import * as Styled from '../styles/PokemonList.styles';
+import { useState, useEffect } from 'react';
 import PokemonCard from './PokemonCard';
 import fetchPokemonData from '../services/fetchPokemonData';
+import styled from 'styled-components';
 
-const PokemonList = () => {
+const GridWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+
+  @media (max-width: 3840px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+`;
+
+export default function PokemonList() {
   const [pokemonData, setPokemonData] = useState([]);
 
   useEffect(() => {
     const fetchPokemon = async () => {
-      const data = await fetchPokemonData();
-      setPokemonData(data);
+      try {
+        const data = await fetchPokemonData();
+        setPokemonData(data);
+      } catch (error) {
+        console.error('Error fetching Pokemon data:', error);
+      }
     };
     fetchPokemon();
   }, []);
 
   return (
-    <Styled.GridWrapper>
-      {pokemonData.map((pokemon, index) => (
+    <GridWrapper>
+      {pokemonData.map((pokemon) => (
         <PokemonCard
-          key={index}
+          key={pokemon.id}
           name={pokemon.name}
-          number={index + 1}
-          imageUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-            index + 1
-          }.png`}
-          types={pokemon.types || []} // Sicherstellen, dass types ein Array ist oder ein leeres Array verwenden für zukünftiges von Pokemon Typen
+          number={pokemon.id}
+          imageUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
         />
       ))}
-    </Styled.GridWrapper>
+    </GridWrapper>
   );
-};
-
-export default PokemonList;
+}
