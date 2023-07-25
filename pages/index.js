@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 const Title = styled.h1`
   text-align: center;
-  font-size: 28px;
+  font-size: 5vw;
   font-weight: bold;
   text-align: center;
   margin: 5% 0;
@@ -12,11 +12,11 @@ const Title = styled.h1`
 
 const GridWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap: 16px;
 
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(1, 1fr);
+  @media (max-width: 3840px) {
+    grid-template-columns: repeat(1, 3fr);
   }
 `;
 
