@@ -19,7 +19,7 @@ const GridWrapper = styled.div`
     grid-template-columns: repeat(1, 3fr);
   }
 `;
-
+//einfach ein kommentar zum commiten
 export default function Home() {
   return (
     <>
