@@ -6,11 +6,15 @@ import { animateScroll as scroll } from 'react-scroll';
 
 const GridWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
 
-  @media (max-width: 3840px) {
+  @media (max-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
@@ -57,10 +61,7 @@ const ScrollToBottomButton = styled.button`
   width: 40px;
   height: 40px;
   display: ${(props) =>
-    props.visible &&
-    props.scrollPosition > 0 &&
-    props.scrollPosition <
-      document.documentElement.scrollHeight - window.innerHeight
+    props.visible && props.scrollPosition > 0 && props.scrollPosition < document.documentElement.scrollHeight - window.innerHeight
       ? 'block'
       : 'none'};
   cursor: pointer;
@@ -129,11 +130,11 @@ export default function PokemonList() {
   });
 
   const scrollToTop = () => {
-    scroll.scrollToTop({ smooth: true });
+    scroll.scrollToTop();
   };
 
   const scrollToBottom = () => {
-    scroll.scrollToBottom({ smooth: true });
+    scroll.scrollToBottom();
   };
 
   return (

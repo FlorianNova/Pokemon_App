@@ -3,11 +3,15 @@ import Image from 'next/image';
 
 const GridWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
 
-  @media (max-width: 3840px) {
-    grid-template-columns: repeat(1, 1fr);
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
@@ -42,13 +46,13 @@ const PokemonImage = styled.div`
 `;
 
 const PokemonNumber = styled.span`
-  font-size: 3vw;
+  font-size: min(3vw, 20px); 
   font-weight: bold;
   margin-top: 8%;
 `;
 
 const PokemonName = styled.h3`
-  font-size: 4vw;
+  font-size: min(4vw, 20px);
   font-weight: bold;
   margin-top: 16%;
   text-transform: capitalize;
