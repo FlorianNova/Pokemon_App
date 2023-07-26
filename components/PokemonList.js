@@ -35,28 +35,33 @@ const ScrollToTopButton = styled.button`
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #007bff;
-  color: #fff;
+  background-color: red; /* Roter Hintergrund */
+  color: white; /* Weiße Schriftfarbe */
   border: none;
   border-radius: 50%;
   width: 40px;
   height: 40px;
   display: ${(props) => (props.visible ? 'block' : 'none')};
   cursor: pointer;
+  font-size: 18px; /* Größe des Doppelpfeils */
 `;
 
 const ScrollToBottomButton = styled.button`
   position: fixed;
-  bottom: 20px; /* Updated to 20px */
-  left: 20px; /* Added left positioning */
-  background-color: #007bff;
-  color: #fff;
+  bottom: 20px;
+  left: 20px;
+  background-color: red; /* Roter Hintergrund */
+  color: white; /* Weiße Schriftfarbe */
   border: none;
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  display: ${(props) => (props.visible ? 'block' : 'none')};
+  display: ${(props) =>
+    props.visible && props.scrollPosition > 0 && props.scrollPosition < document.documentElement.scrollHeight - window.innerHeight
+      ? 'block'
+      : 'none'};
   cursor: pointer;
+  font-size: 18px; /* Größe des Doppelpfeils */
 `;
 
 export default function PokemonList() {
@@ -64,6 +69,7 @@ export default function PokemonList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -78,8 +84,6 @@ export default function PokemonList() {
 
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      const screenHeight = window.innerHeight;
-      const fullHeight = document.documentElement.scrollHeight;
 
       if (scrollY > 300) {
         setShowScrollToTop(true);
@@ -87,16 +91,30 @@ export default function PokemonList() {
         setShowScrollToTop(false);
       }
 
-      if (fullHeight - scrollY - screenHeight > 300) {
+      setScrollPosition(scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleScrollToBottomButton = () => {
+      const scrollY = window.scrollY;
+      const fullHeight = document.documentElement.scrollHeight;
+
+      if (fullHeight - scrollY - window.innerHeight > 300) {
         setShowScrollToBottom(true);
       } else {
         setShowScrollToBottom(false);
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScrollToBottomButton);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScrollToBottomButton);
     };
   }, []);
 
@@ -144,6 +162,7 @@ export default function PokemonList() {
         visible={showScrollToBottom}
         onClick={scrollToBottom}
         title="Scroll to Bottom"
+        scrollPosition={scrollPosition}
       >
         &#8595;
       </ScrollToBottomButton>
