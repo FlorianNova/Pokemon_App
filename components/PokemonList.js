@@ -10,7 +10,7 @@ const GridWrapper = styled.div`
   gap: 16px;
 
   @media (max-width: 3840px) {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 `;
 
