@@ -35,33 +35,36 @@ const ScrollToTopButton = styled.button`
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: red; /* Roter Hintergrund */
-  color: white; /* Weiße Schriftfarbe */
+  background-color: red;
+  color: white;
   border: none;
   border-radius: 50%;
   width: 40px;
   height: 40px;
   display: ${(props) => (props.visible ? 'block' : 'none')};
   cursor: pointer;
-  font-size: 18px; /* Größe des Doppelpfeils */
+  font-size: 18px;
 `;
 
 const ScrollToBottomButton = styled.button`
   position: fixed;
   bottom: 20px;
   left: 20px;
-  background-color: red; /* Roter Hintergrund */
-  color: white; /* Weiße Schriftfarbe */
+  background-color: red;
+  color: white;
   border: none;
   border-radius: 50%;
   width: 40px;
   height: 40px;
   display: ${(props) =>
-    props.visible && props.scrollPosition > 0 && props.scrollPosition < document.documentElement.scrollHeight - window.innerHeight
+    props.visible &&
+    props.scrollPosition > 0 &&
+    props.scrollPosition <
+      document.documentElement.scrollHeight - window.innerHeight
       ? 'block'
       : 'none'};
   cursor: pointer;
-  font-size: 18px; /* Größe des Doppelpfeils */
+  font-size: 18px;
 `;
 
 export default function PokemonList() {
@@ -126,11 +129,11 @@ export default function PokemonList() {
   });
 
   const scrollToTop = () => {
-    scroll.scrollToTop();
+    scroll.scrollToTop({ smooth: true });
   };
 
   const scrollToBottom = () => {
-    scroll.scrollToBottom();
+    scroll.scrollToBottom({ smooth: true });
   };
 
   return (
