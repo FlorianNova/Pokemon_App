@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import { useState } from 'react';
+import styled, { css } from 'styled-components';
 import Image from 'next/image';
 
 const GridWrapper = styled.div`
@@ -33,6 +34,13 @@ const CardWrapper = styled.div`
   margin-bottom: -10%;
   margin-top: 1%;
 
+  ${(props) =>
+    props.selected &&
+    css`
+      border: 4px solid black;
+      box-shadow: 1px 10px 10px 1px rgba(0, 0, 0, 0.1);
+    `}
+
   @media (max-width: 3840px) {
     width: 100%;
   }
@@ -46,7 +54,7 @@ const PokemonImage = styled.div`
 `;
 
 const PokemonNumber = styled.span`
-  font-size: min(3vw, 20px); 
+  font-size: min(3vw, 20px);
   font-weight: bold;
   margin-top: 8%;
 `;
@@ -60,16 +68,16 @@ const PokemonName = styled.h3`
 `;
 
 export default function PokemonCard({ name, number, imageUrl }) {
+  const [selected, setSelected] = useState(false);
+
+  const handleToggleSelect = () => {
+    setSelected((prevSelected) => !prevSelected);
+  };
+
   return (
-    <CardWrapper>
+    <CardWrapper selected={selected} onClick={handleToggleSelect}>
       <PokemonImage imageUrl={imageUrl}>
-        <Image
-          src={imageUrl}
-          alt={name}
-          layout="fill"
-          objectFit="contain"
-          priority
-        />
+        <Image src={imageUrl} alt={name} layout="fill" objectFit="contain" priority />
       </PokemonImage>
       <PokemonNumber>{`#${number}`}</PokemonNumber>
       <PokemonName>{name.charAt(0).toUpperCase() + name.slice(1)}</PokemonName>

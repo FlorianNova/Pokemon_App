@@ -61,7 +61,10 @@ const ScrollToBottomButton = styled.button`
   width: 40px;
   height: 40px;
   display: ${(props) =>
-    props.visible && props.scrollPosition > 0 && props.scrollPosition < document.documentElement.scrollHeight - window.innerHeight
+    props.visible &&
+    props.scrollPosition > 0 &&
+    props.scrollPosition <
+      document.documentElement.scrollHeight - window.innerHeight
       ? 'block'
       : 'none'};
   cursor: pointer;
