@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Image from 'next/image';
 
 const SelectedPokemon = ({ selectedPokemon, onSave }) => {
   const [teamName, setTeamName] = useState('');
@@ -9,7 +10,7 @@ const SelectedPokemon = ({ selectedPokemon, onSave }) => {
 
   const handleSaveClick = () => {
     if (teamName.trim() === '') {
-      alert('Bitte geben Sie einen Namen für das Team ein.');
+      alert('Please enter a name for the team.');
       return;
     }
 
@@ -19,20 +20,20 @@ const SelectedPokemon = ({ selectedPokemon, onSave }) => {
 
   return (
     <div>
-      <h2>Ausgewählte Pokémon:</h2>
+      <h2>Selected Pokémon:</h2>
       {selectedPokemon.map((pokemon) => (
         <div key={pokemon.number}>
-          <img src={pokemon.imageUrl} alt={pokemon.name} />
+          <Image src={pokemon.imageUrl} alt={pokemon.name} width={200} height={200} />
           <p>{pokemon.name}</p>
         </div>
       ))}
       <input
         type="text"
-        placeholder="Teamname eingeben..."
+        placeholder="Choose Name..."
         value={teamName}
         onChange={handleTeamNameChange}
       />
-      <button onClick={handleSaveClick}>Speichern</button>
+      <button onClick={handleSaveClick}>Save</button>
     </div>
   );
 };

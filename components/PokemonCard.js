@@ -37,7 +37,7 @@ const CardWrapper = styled.div`
   ${(props) =>
     props.selected &&
     css`
-      border: 4px solid #00ff00; /* Hellgrün */
+      border: 4px solid #00ff00;
       box-shadow: 1px 10px 10px 1px rgba(0, 0, 0, 0.1);
     `}
 
