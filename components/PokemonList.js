@@ -3,12 +3,13 @@ import PokemonCard from './PokemonCard';
 import fetchPokemonData from '../services/fetchPokemonData';
 import styled from 'styled-components';
 import { animateScroll as scroll } from 'react-scroll';
-import Link from 'next/link';
 
 const GridWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
+  margin-left: 21px;
+  margin-right: 21px;
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
@@ -30,6 +31,15 @@ const SearchBar = styled.input`
   margin: 0 auto;
   margin-bottom: 7%;
   background-color: #caf6d6;
+  position: sticky;
+  top: 5%;
+  z-index: 1;
+  box-shadow: 1px 5px 5px 1px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    width: 80vw;
+    font-size: 3vw;
+  }
 
   @media (max-width: 3840px) {
     width: 60vw;
@@ -40,27 +50,33 @@ const ScrollToTopButton = styled.button`
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: red;
-  color: white;
-  border: none;
+  background-color: transparent;
+  color: black;
+  border: solid 5px black;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   display: ${(props) => (props.visible ? 'block' : 'none')};
   cursor: pointer;
-  font-size: 18px;
+  font-size: 30px;
+
+  &:hover {
+    background-color: #caf6d6;
+    transform: scale(1.5);
+    transition: transform 0.3s ease;
+  }
 `;
 
 const ScrollToBottomButton = styled.button`
   position: fixed;
   bottom: 20px;
   left: 20px;
-  background-color: red;
-  color: white;
-  border: none;
+  background-color: transparent;
+  color: black;
+  border: solid 5px black;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   display: ${(props) =>
     props.visible &&
     props.scrollPosition > 0 &&
@@ -69,18 +85,13 @@ const ScrollToBottomButton = styled.button`
       ? 'block'
       : 'none'};
   cursor: pointer;
-  font-size: 18px;
-`;
+  font-size: 30px;
 
-const TeamsLink = styled.a`
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: blue;
-  color: white;
-  padding: 10px;
-  border-radius: 10px;
-  text-decoration: none;
+  &:hover {
+    background-color: #caf6d6;
+    transform: scale(1.5);
+    transition: transform 0.3s ease;
+  }
 `;
 
 export default function PokemonList() {
@@ -185,7 +196,6 @@ export default function PokemonList() {
       >
         &#8595;
       </ScrollToBottomButton>
-      <TeamsLink href="/teams">Go to Teams Page</TeamsLink>
     </div>
   );
 }

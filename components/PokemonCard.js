@@ -2,20 +2,6 @@ import { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import Image from 'next/image';
 
-const GridWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media (max-width: 480px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-`;
-
 const CardWrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -37,12 +23,20 @@ const CardWrapper = styled.div`
   ${(props) =>
     props.selected &&
     css`
-      border: 4px solid #00ff00;
+      border: 2px solid black;
       box-shadow: 1px 10px 10px 1px rgba(0, 0, 0, 0.1);
+      transform: scale(1.05);
+      transition: transform 0.3s ease;
     `}
 
-  @media (max-width: 3840px) {
-    width: 100%;
+  &:hover {
+    ${(props) =>
+      !props.selected &&
+      css`
+        box-shadow: 1px 10px 10px 1px rgba(0, 0, 0, 0.1);
+        transform: scale(1.05);
+        transition: transform 0.2s ease-in;
+      `}
   }
 `;
 
@@ -64,7 +58,6 @@ const PokemonName = styled.h3`
   font-weight: bold;
   margin-top: 16%;
   text-transform: capitalize;
-  color: #333333;
 `;
 
 export default function PokemonCard({ name, number, imageUrl }) {
@@ -72,41 +65,26 @@ export default function PokemonCard({ name, number, imageUrl }) {
   const [selectedPokemonCount, setSelectedPokemonCount] = useState(0);
 
   useEffect(() => {
-    // Get the currently selected Pokémon from local storage
     const selectedPokemonString = localStorage.getItem('selectedPokemon');
     const selectedPokemon = selectedPokemonString ? JSON.parse(selectedPokemonString) : [];
-
-    // Set the initial selected Pokémon count based on local storage data
     setSelectedPokemonCount(selectedPokemon.length);
-
-    // Check if the current Pokémon is in the selected Pokémon list
     const isSelected = selectedPokemon.some((pokemon) => pokemon.number === number);
     setSelected(isSelected);
   }, [number]);
 
   const handleToggleSelect = () => {
-    // Get the currently selected Pokémon from local storage
     const selectedPokemonString = localStorage.getItem('selectedPokemon');
     const selectedPokemon = selectedPokemonString ? JSON.parse(selectedPokemonString) : [];
 
-    // Check if the selected Pokémon count is less than 6, and if the current Pokémon is not already selected
     if (selectedPokemon.length < 6 && !selected) {
       setSelected(true);
-
-      // Add the current Pokémon to the selectedPokémon array and update local storage
       const updatedSelectedPokemon = [...selectedPokemon, { name, number, imageUrl }];
       localStorage.setItem('selectedPokemon', JSON.stringify(updatedSelectedPokemon));
-
-      // Update the selected Pokémon count
       setSelectedPokemonCount((prevCount) => prevCount + 1);
     } else if (selected) {
       setSelected(false);
-
-      // Remove the current Pokémon from the selectedPokémon array and update local storage
       const updatedSelectedPokemon = selectedPokemon.filter((pokemon) => pokemon.number !== number);
       localStorage.setItem('selectedPokemon', JSON.stringify(updatedSelectedPokemon));
-
-      // Update the selected Pokémon count
       setSelectedPokemonCount((prevCount) => prevCount - 1);
     }
   };
