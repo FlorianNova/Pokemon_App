@@ -3,6 +3,7 @@ import PokemonCard from './PokemonCard';
 import fetchPokemonData from '../services/fetchPokemonData';
 import styled from 'styled-components';
 import { animateScroll as scroll } from 'react-scroll';
+import Link from 'next/link';
 
 const GridWrapper = styled.div`
   display: grid;
@@ -69,6 +70,17 @@ const ScrollToBottomButton = styled.button`
       : 'none'};
   cursor: pointer;
   font-size: 18px;
+`;
+
+const TeamsLink = styled.a`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: blue;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  text-decoration: none;
 `;
 
 export default function PokemonList() {
@@ -173,6 +185,7 @@ export default function PokemonList() {
       >
         &#8595;
       </ScrollToBottomButton>
+      <TeamsLink href="/teams">Go to Teams Page</TeamsLink>
     </div>
   );
 }

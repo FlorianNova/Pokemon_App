@@ -1,21 +1,21 @@
-import { useState } from 'react';
-import Image from 'next/image';
+import { useState } from "react";
+import Image from "next/image";
 
-const SelectedPokemon = ({ selectedPokemon, onSave }) => {
-  const [teamName, setTeamName] = useState('');
+export default function SelectedPokemon({ selectedPokemon, onSave }) {
+  const [teamName, setTeamName] = useState("");
 
   const handleTeamNameChange = (e) => {
     setTeamName(e.target.value);
   };
 
   const handleSaveClick = () => {
-    if (teamName.trim() === '') {
-      alert('Please enter a name for the team.');
+    if (teamName.trim() === "") {
+      alert("Please enter a name for the team.");
       return;
     }
 
     onSave(teamName, selectedPokemon);
-    setTeamName('');
+    setTeamName("");
   };
 
   return (
@@ -36,6 +36,4 @@ const SelectedPokemon = ({ selectedPokemon, onSave }) => {
       <button onClick={handleSaveClick}>Save</button>
     </div>
   );
-};
-
-export default SelectedPokemon;
+}
