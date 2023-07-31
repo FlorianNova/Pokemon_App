@@ -47,10 +47,8 @@ const SearchBar = styled.input`
   }
 `;
 
-const ScrollToTopButton = styled.button`
+const ActionButton = styled.button`
   position: fixed;
-  bottom: 20px;
-  right: 20px;
   background-color: transparent;
   color: black;
   border: solid 5px black;
@@ -68,68 +66,60 @@ const ScrollToTopButton = styled.button`
   }
 `;
 
-const ScrollToBottomButton = styled.button`
-  position: fixed;
+const ScrollToTopButton = styled(ActionButton)`
+  bottom: 20px;
+  right: 20px;
+`;
+
+const ScrollToBottomButton = styled(ActionButton)`
   bottom: 20px;
   left: 20px;
-  background-color: transparent;
-  color: black;
-  border: solid 5px black;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
   display: ${(props) =>
-    props.visible &&
-    props.scrollPosition > 0 &&
-    props.scrollPosition <
-      document.documentElement.scrollHeight - window.innerHeight
+    props.visible && props.scrollPosition > 0 &&
+    props.scrollPosition < document.documentElement.scrollHeight - window.innerHeight
       ? 'block'
       : 'none'};
-  cursor: pointer;
-  font-size: 30px;
-
-  &:hover {
-    background-color: #caf6d6;
-    transform: scale(1.5);
-    transition: transform 0.3s ease;
-  }
 `;
 
 const SaveTeamsButton = styled.button`
   position: fixed;
-  bottom: 80px;
-  right: 20px;
+  top: 2vw;
+  right: 2vw;
   background-color: blue;
   color: white;
-  padding: 10px;
+  padding: 2vw;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 2vw;
   border: none;
   outline: none;
 `;
+
 
 const MenuButton = styled.button`
   position: fixed;
-  bottom: 140px;
-  right: 20px;
+  top: 2vw;
+  left: 2vw;
   background-color: #ffd700;
   color: black;
-  padding: 10px;
+  padding: 2vw;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 2vw;
   border: none;
   outline: none;
 `;
 
-const ModalOverlay = styled.div`
+const ModalWrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 20;
 `;
 
@@ -229,13 +219,6 @@ export default function PokemonList() {
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem(
-      'selectedPokemonList',
-      JSON.stringify(selectedPokemonList)
-    );
-  }, [selectedPokemonList]);
-
   const filteredPokemon = pokemonData.filter((pokemon) => {
     return (
       pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -261,6 +244,13 @@ export default function PokemonList() {
     } else if (selectedPokemonList.length < 6) {
       setSelectedPokemonList((prevList) => [...prevList, pokemon]);
     }
+  };
+
+  const handleSaveTeams = () => {
+    localStorage.setItem(
+      'selectedPokemonList',
+      JSON.stringify(selectedPokemonList)
+    );
   };
 
   const handleShowSavedPokemon = () => {
@@ -308,29 +298,17 @@ export default function PokemonList() {
       >
         &#8595;
       </ScrollToBottomButton>
-      <SaveTeamsButton onClick={handleShowSavedPokemon}>Save Teams</SaveTeamsButton>
+      <SaveTeamsButton onClick={handleSaveTeams}>Save Teams</SaveTeamsButton>
 
       <MenuButton onClick={handleShowSavedPokemon}>
         <RiMenuLine size={24} />
       </MenuButton>
 
-      <h2>Selected Pokemon:</h2>
-      <div>
-        {selectedPokemonList.map((pokemon) => (
-          <PokemonCard
-            key={pokemon.number}
-            name={pokemon.name}
-            number={pokemon.number}
-            imageUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.number}.png`}
-          />
-        ))}
-      </div>
-
       {showSavedPokemonModal && (
-        <ModalOverlay onClick={handleCloseModal}>
-          <ModalContent onClick={(e) => e.stopPropagation()}>
+        <ModalWrapper>
+          <ModalContent>
             <CloseButton onClick={handleCloseModal}>&times;</CloseButton>
-            <h2>Gespeicherte Pokémon</h2>
+            <h2>Saved Pokémon</h2>
             {selectedPokemonList.length > 0 ? (
               <SavedPokemonList>
                 {selectedPokemonList.map((pokemon) => (
@@ -340,10 +318,10 @@ export default function PokemonList() {
                 ))}
               </SavedPokemonList>
             ) : (
-              <p>Keine Pokémon gespeichert.</p>
+              <p>No saved Pokémon.</p>
             )}
           </ModalContent>
-        </ModalOverlay>
+        </ModalWrapper>
       )}
     </div>
   );
