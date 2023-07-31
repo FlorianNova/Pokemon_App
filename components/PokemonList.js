@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PokemonCard from './PokemonCard';
 import fetchPokemonData from '../services/fetchPokemonData';
 import styled from 'styled-components';
@@ -75,8 +75,10 @@ const ScrollToBottomButton = styled(ActionButton)`
   bottom: 20px;
   left: 20px;
   display: ${(props) =>
-    props.visible && props.scrollPosition > 0 &&
-    props.scrollPosition < document.documentElement.scrollHeight - window.innerHeight
+    props.visible &&
+    props.scrollPosition > 0 &&
+    props.scrollPosition <
+      document.documentElement.scrollHeight - window.innerHeight
       ? 'block'
       : 'none'};
 `;
@@ -94,7 +96,6 @@ const SaveTeamsButton = styled.button`
   border: none;
   outline: none;
 `;
-
 
 const MenuButton = styled.button`
   position: fixed;
@@ -220,6 +221,8 @@ export default function PokemonList() {
   }, []);
 
   const filteredPokemon = pokemonData.filter((pokemon) => {
+    if (searchTerm === '') return pokemonData;
+    else if (searchTerm.length === 0) return pokemonData;
     return (
       pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       pokemon.id.toString().includes(searchTerm)
@@ -234,17 +237,22 @@ export default function PokemonList() {
     scroll.scrollToBottom();
   };
 
-  const handleToggleSelect = (pokemon) => {
-    if (
-      selectedPokemonList.some((selected) => selected.number === pokemon.number)
-    ) {
-      setSelectedPokemonList((prevList) =>
-        prevList.filter((selected) => selected.number !== pokemon.number)
-      );
-    } else if (selectedPokemonList.length < 6) {
-      setSelectedPokemonList((prevList) => [...prevList, pokemon]);
-    }
-  };
+  const handleToggleSelect = useCallback(
+    (pokemon) => {
+      if (
+        selectedPokemonList.some(
+          (selected) => selected.number === pokemon.number
+        )
+      ) {
+        setSelectedPokemonList((prevList) =>
+          prevList.filter((selected) => selected.number !== pokemon.number)
+        );
+      } else if (selectedPokemonList.length < 6) {
+        setSelectedPokemonList((prevList) => [...prevList, pokemon]);
+      }
+    },
+    [selectedPokemonList]
+  );
 
   const handleSaveTeams = () => {
     localStorage.setItem(
@@ -271,16 +279,15 @@ export default function PokemonList() {
       />
       <GridWrapper>
         {filteredPokemon.map((pokemon) => (
-          <PokemonCard
-            key={pokemon.id}
-            name={pokemon.name}
-            number={pokemon.id}
-            imageUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
-            selected={selectedPokemonList.some(
-              (selected) => selected.number === pokemon.number
-            )}
-            onClick={() => handleToggleSelect(pokemon)}
-          />
+        <PokemonCard
+                    key={pokemon.id}
+                    name={pokemon.name}
+                    number={pokemon.id}
+                    imageUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
+                    selected={selectedPokemonList.some((selected) => selected.number === pokemon.number)}
+                    handleOuterSelect={handleToggleSelect}
+                />
+  
         ))}
       </GridWrapper>
       <ScrollToTopButton

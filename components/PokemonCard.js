@@ -60,42 +60,48 @@ const PokemonName = styled.h3`
   text-transform: capitalize;
 `;
 
-export default function PokemonCard({ name, number, imageUrl }) {
+export default function PokemonCard({name, number, imageUrl, handleOuterSelect}) {
   const [selected, setSelected] = useState(false);
   const [selectedPokemonCount, setSelectedPokemonCount] = useState(0);
 
   useEffect(() => {
-    const selectedPokemonString = localStorage.getItem('selectedPokemon');
-    const selectedPokemon = selectedPokemonString ? JSON.parse(selectedPokemonString) : [];
-    setSelectedPokemonCount(selectedPokemon.length);
-    const isSelected = selectedPokemon.some((pokemon) => pokemon.number === number);
-    setSelected(isSelected);
+      const selectedPokemonString = localStorage.getItem('selectedPokemon');
+      const selectedPokemon = selectedPokemonString ? JSON.parse(selectedPokemonString) : [];
+      setSelectedPokemonCount(selectedPokemon.length);
+      const isSelected = selectedPokemon.some((pokemon) => pokemon.number === number);
+      setSelected(isSelected);
   }, [number]);
 
   const handleToggleSelect = () => {
-    const selectedPokemonString = localStorage.getItem('selectedPokemon');
-    const selectedPokemon = selectedPokemonString ? JSON.parse(selectedPokemonString) : [];
+      const pokemon = {
+          id: number,
+          name,
+          number,
+          imageUrl,
+      }
+      handleOuterSelect(pokemon);
+      const selectedPokemonString = localStorage.getItem('selectedPokemon');
+      const selectedPokemon = selectedPokemonString ? JSON.parse(selectedPokemonString) : [];
 
-    if (selectedPokemon.length < 6 && !selected) {
-      setSelected(true);
-      const updatedSelectedPokemon = [...selectedPokemon, { name, number, imageUrl }];
-      localStorage.setItem('selectedPokemon', JSON.stringify(updatedSelectedPokemon));
-      setSelectedPokemonCount((prevCount) => prevCount + 1);
-    } else if (selected) {
-      setSelected(false);
-      const updatedSelectedPokemon = selectedPokemon.filter((pokemon) => pokemon.number !== number);
-      localStorage.setItem('selectedPokemon', JSON.stringify(updatedSelectedPokemon));
-      setSelectedPokemonCount((prevCount) => prevCount - 1);
-    }
+      if (selectedPokemon.length < 6 && !selected) {
+          setSelected(true);
+          const updatedSelectedPokemon = [...selectedPokemon, {name, number, imageUrl}];
+          localStorage.setItem('selectedPokemon', JSON.stringify(updatedSelectedPokemon));
+          setSelectedPokemonCount((prevCount) => prevCount + 1);
+      } else if (selected) {
+          setSelected(false);
+          const updatedSelectedPokemon = selectedPokemon.filter((pokemon) => pokemon.number !== number);
+          localStorage.setItem('selectedPokemon', JSON.stringify(updatedSelectedPokemon));
+          setSelectedPokemonCount((prevCount) => prevCount - 1);
+      }
   };
-
-  return (
-    <CardWrapper selected={selected} onClick={handleToggleSelect}>
-      <PokemonImage imageUrl={imageUrl}>
-        <Image src={imageUrl} alt={name} layout="fill" objectFit="contain" priority />
-      </PokemonImage>
-      <PokemonNumber>{`#${number}`}</PokemonNumber>
-      <PokemonName>{name.charAt(0).toUpperCase() + name.slice(1)}</PokemonName>
-    </CardWrapper>
+return (
+      <CardWrapper selected={selected} onClick={handleToggleSelect}>
+          <PokemonImage imageUrl={imageUrl}>
+              <Image src={imageUrl} alt={name} layout="fill" objectFit="contain" priority/>
+          </PokemonImage>
+          <PokemonNumber>{`#${number}`}</PokemonNumber>
+          <PokemonName>{name.charAt(0).toUpperCase() + name.slice(1)}</PokemonName>
+      </CardWrapper>
   );
 }
