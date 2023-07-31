@@ -229,6 +229,13 @@ export default function PokemonList() {
     }
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem(
+      'selectedPokemonList',
+      JSON.stringify(selectedPokemonList)
+    );
+  }, [selectedPokemonList]);
+
   const filteredPokemon = pokemonData.filter((pokemon) => {
     return (
       pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -254,13 +261,6 @@ export default function PokemonList() {
     } else if (selectedPokemonList.length < 6) {
       setSelectedPokemonList((prevList) => [...prevList, pokemon]);
     }
-  };
-
-  const handleSaveTeams = () => {
-    localStorage.setItem(
-      'selectedPokemonList',
-      JSON.stringify(selectedPokemonList)
-    );
   };
 
   const handleShowSavedPokemon = () => {
@@ -308,7 +308,7 @@ export default function PokemonList() {
       >
         &#8595;
       </ScrollToBottomButton>
-      <SaveTeamsButton onClick={handleSaveTeams}>Save Teams</SaveTeamsButton>
+      <SaveTeamsButton onClick={handleShowSavedPokemon}>Save Teams</SaveTeamsButton>
 
       <MenuButton onClick={handleShowSavedPokemon}>
         <RiMenuLine size={24} />
