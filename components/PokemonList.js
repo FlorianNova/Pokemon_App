@@ -3,6 +3,8 @@ import PokemonCard from './PokemonCard';
 import fetchPokemonData from '../services/fetchPokemonData';
 import styled from 'styled-components';
 import { animateScroll as scroll } from 'react-scroll';
+import { RiMenuLine } from 'react-icons/ri';
+
 
 const GridWrapper = styled.div`
   display: grid;
@@ -94,12 +96,30 @@ const ScrollToBottomButton = styled.button`
   }
 `;
 
+const SaveTeamsButton = styled.button`
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  background-color: blue;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  border: none;
+  outline: none;
+`;
+
+
+
+
 export default function PokemonList() {
   const [pokemonData, setPokemonData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [selectedPokemonList, setSelectedPokemonList] = useState([]);
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -143,9 +163,19 @@ export default function PokemonList() {
     };
 
     window.addEventListener('scroll', handleScrollToBottomButton);
+    window.addEventListener('scroll', handleScrollToBottomButton);
     return () => {
       window.removeEventListener('scroll', handleScrollToBottomButton);
     };
+  }, []);
+
+  useEffect(() => {
+    const storedSelectedPokemonList = localStorage.getItem(
+      'selectedPokemonList'
+    );
+    if (storedSelectedPokemonList) {
+      setSelectedPokemonList(JSON.parse(storedSelectedPokemonList));
+    }
   }, []);
 
   const filteredPokemon = pokemonData.filter((pokemon) => {
@@ -163,6 +193,25 @@ export default function PokemonList() {
     scroll.scrollToBottom();
   };
 
+  const handleToggleSelect = (pokemon) => {
+    if (
+      selectedPokemonList.some((selected) => selected.number === pokemon.number)
+    ) {
+      setSelectedPokemonList((prevList) =>
+        prevList.filter((selected) => selected.number !== pokemon.number)
+      );
+    } else if (selectedPokemonList.length < 6) {
+      setSelectedPokemonList((prevList) => [...prevList, pokemon]);
+    }
+  };
+
+  const handleSaveTeams = () => {
+    localStorage.setItem(
+      'selectedPokemonList',
+      JSON.stringify(selectedPokemonList)
+    );
+  };
+
   return (
     <div>
       <SearchBar
@@ -178,6 +227,10 @@ export default function PokemonList() {
             name={pokemon.name}
             number={pokemon.id}
             imageUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
+            selected={selectedPokemonList.some(
+              (selected) => selected.number === pokemon.number
+            )}
+            onClick={() => handleToggleSelect(pokemon)}
           />
         ))}
       </GridWrapper>
@@ -196,6 +249,19 @@ export default function PokemonList() {
       >
         &#8595;
       </ScrollToBottomButton>
+      <SaveTeamsButton onClick={handleSaveTeams}>Save Teams</SaveTeamsButton>
+
+      <h2>Selected Pokemon:</h2>
+      <div>
+        {selectedPokemonList.map((pokemon) => (
+          <PokemonCard
+            key={pokemon.number}
+            name={pokemon.name}
+            number={pokemon.number}
+            imageUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.number}.png`}
+          />
+        ))}
+      </div>
     </div>
   );
 }
