@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { animateScroll as scroll } from 'react-scroll';
 import { RiMenuLine } from 'react-icons/ri';
 
-
 const GridWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -110,8 +109,58 @@ const SaveTeamsButton = styled.button`
   outline: none;
 `;
 
+const MenuButton = styled.button`
+  position: fixed;
+  bottom: 140px;
+  right: 20px;
+  background-color: #ffd700;
+  color: black;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  border: none;
+  outline: none;
+`;
 
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 20;
+`;
 
+const ModalContent = styled.div`
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 20;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  color: black;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+`;
+
+const SavedPokemonList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const SavedPokemonItem = styled.li`
+  margin-bottom: 10px;
+`;
 
 export default function PokemonList() {
   const [pokemonData, setPokemonData] = useState([]);
@@ -120,6 +169,7 @@ export default function PokemonList() {
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [selectedPokemonList, setSelectedPokemonList] = useState([]);
+  const [showSavedPokemonModal, setShowSavedPokemonModal] = useState(false);
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -131,7 +181,9 @@ export default function PokemonList() {
       }
     };
     fetchPokemon();
+  }, []);
 
+  useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
 
@@ -162,7 +214,6 @@ export default function PokemonList() {
       }
     };
 
-    window.addEventListener('scroll', handleScrollToBottomButton);
     window.addEventListener('scroll', handleScrollToBottomButton);
     return () => {
       window.removeEventListener('scroll', handleScrollToBottomButton);
@@ -212,6 +263,14 @@ export default function PokemonList() {
     );
   };
 
+  const handleShowSavedPokemon = () => {
+    setShowSavedPokemonModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowSavedPokemonModal(false);
+  };
+
   return (
     <div>
       <SearchBar
@@ -251,6 +310,10 @@ export default function PokemonList() {
       </ScrollToBottomButton>
       <SaveTeamsButton onClick={handleSaveTeams}>Save Teams</SaveTeamsButton>
 
+      <MenuButton onClick={handleShowSavedPokemon}>
+        <RiMenuLine size={24} />
+      </MenuButton>
+
       <h2>Selected Pokemon:</h2>
       <div>
         {selectedPokemonList.map((pokemon) => (
@@ -262,6 +325,26 @@ export default function PokemonList() {
           />
         ))}
       </div>
+
+      {showSavedPokemonModal && (
+        <ModalOverlay onClick={handleCloseModal}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <CloseButton onClick={handleCloseModal}>&times;</CloseButton>
+            <h2>Gespeicherte Pokémon</h2>
+            {selectedPokemonList.length > 0 ? (
+              <SavedPokemonList>
+                {selectedPokemonList.map((pokemon) => (
+                  <SavedPokemonItem key={pokemon.number}>
+                    {pokemon.name} (Number: {pokemon.number})
+                  </SavedPokemonItem>
+                ))}
+              </SavedPokemonList>
+            ) : (
+              <p>Keine Pokémon gespeichert.</p>
+            )}
+          </ModalContent>
+        </ModalOverlay>
+      )}
     </div>
   );
 }
