@@ -38,6 +38,11 @@ const SearchBar = styled.input`
   z-index: 1;
   box-shadow: 1px 5px 5px 1px rgba(0, 0, 0, 0.1);
 
+  &:hover {
+    box-shadow: 1px 5px 5px 1px rgba(0, 0, 0, 0.2);
+    border: 3px solid lightgrey;
+  }
+
   @media (max-width: 768px) {
     width: 80vw;
     font-size: 3vw;
@@ -66,6 +71,7 @@ const ActionButton = styled.button`
     transition: transform 0.3s ease;
   }
 `;
+
 const ScrollToTopButton = styled(ActionButton)`
   bottom: 20px;
   right: 20px;
@@ -84,7 +90,6 @@ const ScrollToBottomButton = styled(ActionButton)`
       ? 'block'
       : 'none'};
 `;
-
 
 const SaveTeamsButton = styled.button`
   position: fixed;
@@ -152,7 +157,7 @@ const CloseButton = styled.button`
   top: 20px;
   right: 20px;
   color: black;
-  border: 1px solid
+  border: 1px solid;
   cursor: pointer;
   font-size: 10vw;
   border-radius: 10px;
@@ -161,6 +166,26 @@ const CloseButton = styled.button`
   &:hover {
     transform: scale(1.05);
     cursor: pointer;
+    transition: transform 0.3s ease;
+    background-color: darkGray;
+  }
+`;
+
+const DeleteButton = styled.button`
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: black;
+  border: 1px solid;
+  cursor: pointer;
+  font-size: 10vw;
+  border-radius: 10px;
+  background-color: white;
+
+  &:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+    transition: transform 0.3s ease;
   }
 `;
 
@@ -271,6 +296,14 @@ export default function PokemonList() {
     setShowSavedPokemonModal(true);
   };
 
+  const handleDeletePokemon = (pokemonNumber) => {
+    const updatedList = selectedPokemonList.filter(
+      (pokemon) => pokemon.number !== pokemonNumber
+    );
+    setSelectedPokemonList(updatedList);
+    localStorage.setItem('selectedPokemonList', JSON.stringify(updatedList));
+  };
+
   const handleCloseModal = useCallback(() => {
     setShowSavedPokemonModal(false);
   }, []);
@@ -295,7 +328,7 @@ export default function PokemonList() {
         <RiMenuLine size={24} />
       </MenuButton>
       {showSavedPokemonModal && (
-        <ModalWrapper onClick={handleCloseModal}>
+        <ModalWrapper>
           <ModalContent>
             <CloseButton onClick={handleCloseModal}>&times;</CloseButton>
             <h2>Saved Pokémon</h2>
@@ -304,6 +337,9 @@ export default function PokemonList() {
                 {selectedPokemonList.map((pokemon) => (
                   <SavedPokemonItem key={pokemon.number}>
                     {pokemon.name} (Number: {pokemon.number})
+                    <button onClick={() => handleDeletePokemon(pokemon.number)}>
+                      &#x2716;
+                    </button>
                   </SavedPokemonItem>
                 ))}
               </SavedPokemonList>
