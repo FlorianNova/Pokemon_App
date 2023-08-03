@@ -74,13 +74,13 @@ const ActionButton = styled.button`
 
 const ScrollToTopButton = styled(ActionButton)`
   bottom: 20px;
-  right: 20px;
+  left: 20px;
   z-index: 10;
 `;
 
 const ScrollToBottomButton = styled(ActionButton)`
   bottom: 20px;
-  left: 20px;
+  right: 20px;
   z-index: 10;
   display: ${(props) =>
     props.visible &&
