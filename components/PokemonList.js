@@ -60,20 +60,21 @@ const ActionButton = styled.button`
   font-size: 30px;
 
   &:hover {
-    background-color: #caf6d6;
+    background-color: transparent;
     transform: scale(1.5);
     transition: transform 0.3s ease;
   }
 `;
-
 const ScrollToTopButton = styled(ActionButton)`
   bottom: 20px;
   right: 20px;
+  z-index: 10;
 `;
 
 const ScrollToBottomButton = styled(ActionButton)`
   bottom: 20px;
   left: 20px;
+  z-index: 10;
   display: ${(props) =>
     props.visible &&
     props.scrollPosition > 0 &&
@@ -82,6 +83,7 @@ const ScrollToBottomButton = styled(ActionButton)`
       ? 'block'
       : 'none'};
 `;
+
 
 const SaveTeamsButton = styled.button`
   position: fixed;
@@ -95,6 +97,7 @@ const SaveTeamsButton = styled.button`
   font-size: 2vw;
   border: none;
   outline: none;
+  z-index: 10;
 
   &:hover {
     background-color: #8fcf8b;
@@ -114,6 +117,7 @@ const MenuButton = styled.button`
   font-size: 2vw;
   border: none;
   outline: none;
+  z-index: 10;
 
   &:hover {
     background-color: #e2c100;
@@ -132,7 +136,6 @@ const ModalWrapper = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 20;
-  cursor: pointer;
 `;
 
 const ModalContent = styled.div`
@@ -145,13 +148,19 @@ const ModalContent = styled.div`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: transparent;
+  top: 20px;
+  right: 20px;
   color: black;
-  border: none;
+  border: 1px solid
   cursor: pointer;
-  font-size: 20px;
+  font-size: 10vw;
+  border-radius: 10px;
+  background-color: white;
+
+  &:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
 `;
 
 const SavedPokemonList = styled.ul`
