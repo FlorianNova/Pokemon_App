@@ -33,7 +33,8 @@ export default function SavedPokemonList() {
   const [savedPokemonList, setSavedPokemonList] = useState([]);
 
   useEffect(() => {
-    const savedList = JSON.parse(localStorage.getItem('selectedPokemonList')) || [];
+    const savedList =
+      JSON.parse(localStorage.getItem('selectedPokemonList')) || [];
     setSavedPokemonList(savedList);
   }, []);
 

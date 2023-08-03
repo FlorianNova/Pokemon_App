@@ -87,7 +87,7 @@ const SaveTeamsButton = styled.button`
   position: fixed;
   top: 2vw;
   right: 2vw;
-  background-color: blue;
+  background-color: lightgreen;
   color: white;
   padding: 2vw;
   border-radius: 10px;
@@ -95,6 +95,11 @@ const SaveTeamsButton = styled.button`
   font-size: 2vw;
   border: none;
   outline: none;
+
+  &:hover {
+    background-color: #8fcf8b;
+    transform: scale(1.05);
+  }
 `;
 
 const MenuButton = styled.button`
@@ -109,6 +114,11 @@ const MenuButton = styled.button`
   font-size: 2vw;
   border: none;
   outline: none;
+
+  &:hover {
+    background-color: #e2c100;
+    transform: scale(1.05);
+  }
 `;
 
 const ModalWrapper = styled.div`
@@ -122,6 +132,7 @@ const ModalWrapper = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 20;
+  cursor: pointer;
 `;
 
 const ModalContent = styled.div`
@@ -229,35 +240,20 @@ export default function PokemonList() {
     );
   });
 
-  const scrollToTop = () => {
+  const handleScrollToTop = () => {
     scroll.scrollToTop();
   };
 
-  const scrollToBottom = () => {
+  const handleScrollToBottom = () => {
     scroll.scrollToBottom();
   };
 
-  const handleToggleSelect = useCallback(
-    (pokemon) => {
-      if (
-        selectedPokemonList.some(
-          (selected) => selected.number === pokemon.number
-        )
-      ) {
-        setSelectedPokemonList((prevList) =>
-          prevList.filter((selected) => selected.number !== pokemon.number)
-        );
-      } else if (selectedPokemonList.length < 6) {
-        setSelectedPokemonList((prevList) => [...prevList, pokemon]);
-      }
-    },
-    [selectedPokemonList]
-  );
-
-  const handleSaveTeams = () => {
+  const handleSaveSelectedPokemon = (pokemon) => {
+    const updatedSelectedPokemonList = [...selectedPokemonList, pokemon];
+    setSelectedPokemonList(updatedSelectedPokemonList);
     localStorage.setItem(
       'selectedPokemonList',
-      JSON.stringify(selectedPokemonList)
+      JSON.stringify(updatedSelectedPokemonList)
     );
   };
 
@@ -265,54 +261,31 @@ export default function PokemonList() {
     setShowSavedPokemonModal(true);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setShowSavedPokemonModal(false);
-  };
+  }, []);
 
   return (
     <div>
-      <SearchBar
-        type="text"
-        placeholder="Search by name or number..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <GridWrapper>
-        {filteredPokemon.map((pokemon) => (
-        <PokemonCard
-                    key={pokemon.id}
-                    name={pokemon.name}
-                    number={pokemon.id}
-                    imageUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
-                    selected={selectedPokemonList.some((selected) => selected.number === pokemon.number)}
-                    handleOuterSelect={handleToggleSelect}
-                />
-  
-        ))}
-      </GridWrapper>
       <ScrollToTopButton
         visible={showScrollToTop}
-        onClick={scrollToTop}
-        title="Scroll to Top"
+        onClick={handleScrollToTop}
       >
-        &#8593;
+        &#8679;
       </ScrollToTopButton>
       <ScrollToBottomButton
         visible={showScrollToBottom}
-        onClick={scrollToBottom}
-        title="Scroll to Bottom"
         scrollPosition={scrollPosition}
+        onClick={handleScrollToBottom}
       >
-        &#8595;
+        &#8681;
       </ScrollToBottomButton>
-      <SaveTeamsButton onClick={handleSaveTeams}>Save Teams</SaveTeamsButton>
-
+      <SaveTeamsButton onClick={handleShowSavedPokemon}>Save Teams</SaveTeamsButton>
       <MenuButton onClick={handleShowSavedPokemon}>
         <RiMenuLine size={24} />
       </MenuButton>
-
       {showSavedPokemonModal && (
-        <ModalWrapper>
+        <ModalWrapper onClick={handleCloseModal}>
           <ModalContent>
             <CloseButton onClick={handleCloseModal}>&times;</CloseButton>
             <h2>Saved Pokémon</h2>
@@ -330,6 +303,23 @@ export default function PokemonList() {
           </ModalContent>
         </ModalWrapper>
       )}
+      <SearchBar
+        type="text"
+        placeholder="Search for Pokémon..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <GridWrapper>
+        {filteredPokemon.map((pokemon) => (
+          <PokemonCard
+            key={pokemon.id}
+            name={pokemon.name}
+            number={pokemon.id}
+            imageUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
+            handleOuterSelect={handleSaveSelectedPokemon}
+          />
+        ))}
+      </GridWrapper>
     </div>
   );
 }
