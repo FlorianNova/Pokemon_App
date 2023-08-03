@@ -9,8 +9,9 @@ const GridWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
-  margin-left: 21px;
-  margin-right: 21px;
+  margin-left: 2vw;
+  margin-right: 2vw;
+  margin-bottom: 2vw;
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
