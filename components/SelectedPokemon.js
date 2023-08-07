@@ -33,7 +33,7 @@ export default function SelectedPokemon({ selectedPokemon, onSave }) {
         value={teamName}
         onChange={handleTeamNameChange}
       />
-      <button onClick={handleSaveClick}>Save</button>
+      <button onClick={() => handleSaveClick()}>Save</button>
     </div>
   );
 }
