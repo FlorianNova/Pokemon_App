@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import PokemonList from '../components/PokemonList';
+import SavedPokemonList from '../components/SavedPokemonList';
 import styled from 'styled-components';
 
 const Title = styled.h1`
@@ -33,6 +34,7 @@ export default function Home() {
         <GridWrapper>
           <PokemonList />
         </GridWrapper>
+        <SavedPokemonList selectedSavedPokemonList={[]} onDeletePokemon={() => {}} />
       </main>
     </>
   );

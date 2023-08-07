@@ -18,6 +18,7 @@ const SavedPokemonCard = styled.div`
   border-radius: 10px;
   padding: 10px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: ${(props) => (props.isSelected ? 'lightblue' : 'white')};
 `;
 
 const PokemonName = styled.h3`
@@ -29,21 +30,19 @@ const PokemonImage = styled.img`
   height: 100px;
 `;
 
-export default function SavedPokemonList() {
-  const [savedPokemonList, setSavedPokemonList] = useState([]);
+export default function SavedPokemonList({ selectedSavedPokemonList }) {
+  const [savedPokemonList, setSavedPokemonList] = useState(selectedSavedPokemonList);
 
   useEffect(() => {
-    const savedList =
-      JSON.parse(localStorage.getItem('selectedPokemonList')) || [];
-    setSavedPokemonList(savedList);
-  }, []);
+    setSavedPokemonList(selectedSavedPokemonList);
+  }, [selectedSavedPokemonList]);
 
   return (
     <div>
       <h2>Saved Pokemon List</h2>
       <SavedPokemonWrapper>
         {savedPokemonList.map((pokemon) => (
-          <SavedPokemonCard key={pokemon.number}>
+          <SavedPokemonCard key={pokemon.number} isSelected={true}>
             <PokemonName>{pokemon.name}</PokemonName>
             <PokemonImage
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.number}.png`}

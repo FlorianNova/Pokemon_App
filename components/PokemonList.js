@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import PokemonCard from './PokemonCard';
 import fetchPokemonData from '../services/fetchPokemonData';
 import styled from 'styled-components';
@@ -267,8 +267,7 @@ export default function PokemonList() {
   }, []);
 
   const filteredPokemon = pokemonData.filter((pokemon) => {
-    if (searchTerm === '') return pokemonData;
-    else if (searchTerm.length === 0) return pokemonData;
+    if (searchTerm === '') return true;
     return (
       pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       pokemon.id.toString().includes(searchTerm)
@@ -304,9 +303,9 @@ export default function PokemonList() {
     localStorage.setItem('selectedPokemonList', JSON.stringify(updatedList));
   };
 
-  const handleCloseModal = useCallback(() => {
+  const handleCloseModal = () => {
     setShowSavedPokemonModal(false);
-  }, []);
+  };
 
   return (
     <div>
@@ -323,7 +322,9 @@ export default function PokemonList() {
       >
         &#8681;
       </ScrollToBottomButton>
-      <SaveTeamsButton onClick={handleShowSavedPokemon}>Save Teams</SaveTeamsButton>
+      <SaveTeamsButton onClick={handleShowSavedPokemon}>
+        Save Teams
+      </SaveTeamsButton>
       <MenuButton onClick={handleShowSavedPokemon}>
         <RiMenuLine size={24} />
       </MenuButton>
@@ -337,9 +338,11 @@ export default function PokemonList() {
                 {selectedPokemonList.map((pokemon) => (
                   <SavedPokemonItem key={pokemon.number}>
                     {pokemon.name} (Number: {pokemon.number})
-                    <button onClick={() => handleDeletePokemon(pokemon.number)}>
+                    <DeleteButton
+                      onClick={() => handleDeletePokemon(pokemon.number)}
+                    >
                       &#x2716;
-                    </button>
+                    </DeleteButton>
                   </SavedPokemonItem>
                 ))}
               </SavedPokemonList>
@@ -362,7 +365,7 @@ export default function PokemonList() {
             name={pokemon.name}
             number={pokemon.id}
             imageUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
-            handleOuterSelect={handleSaveSelectedPokemon}
+            handleSaveSelectedPokemon={handleSaveSelectedPokemon}
           />
         ))}
       </GridWrapper>
