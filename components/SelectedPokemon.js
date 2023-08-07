@@ -9,6 +9,8 @@ export default function SelectedPokemon({ selectedPokemon, onSave }) {
   };
 
   const handleSaveClick = () => {
+    console.log("test");
+    onSave(selectedPokemon);
     if (teamName.trim() === "") {
       alert("Please enter a name for the team.");
       return;
