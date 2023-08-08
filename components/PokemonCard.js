@@ -2,27 +2,6 @@ import { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import Image from 'next/image';
 
-const typeToColor = {
-  normal: '#A8A77A',
-  fire: '#EE8130',
-  water: '#6390F0',
-  electric: '#F7D02C',
-  grass: '#7AC74C',
-  ice: '#96D9D6',
-  fighting: '#C22E28',
-  poison: '#A33EA1',
-  ground: '#E2BF65',
-  flying: '#A98FF3',
-  psychic: '#F95587',
-  bug: '#A6B91A',
-  rock: '#B6A136',
-  ghost: '#735797',
-  dragon: '#6F35FC',
-  dark: '#705746',
-  steel: '#B7B7CE',
-  fairy: '#D685AD',
-};
-
 const CardWrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -81,46 +60,39 @@ const PokemonName = styled.h3`
   text-transform: capitalize;
 `;
 
-const PokemonTypesWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 8px;
-`;
-
 const PokemonType = styled.span`
-  background-color: ${(props) => typeToColor[props.type]};
-  color: white;
   padding: 4px 8px;
   border-radius: 4px;
-  margin: 4px;
+  margin-top: 4px;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: white;
+  background-color: ${(props) => typeToColor[props.type]};
 `;
 
-const PokemonDetails = styled.div`
-  margin-top: 16px;
-`;
+const typeToColor = {
+  normal: "#A8A77A",
+  fire: "#EE8130",
+  water: "#6390F0",
+  electric: "#F7D02C",
+  grass: "#7AC74C",
+  ice: "#96D9D6",
+  fighting: "#C22E28",
+  poison: "#A33EA1",
+  ground: "#E2BF65",
+  flying: "#A98FF3",
+  psychic: "#F95587",
+  bug: "#A6B91A",
+  rock: "#B6A136",
+  ghost: "#735797",
+  dragon: "#6F35FC",
+  dark: "#705746",
+  steel: "#B7B7CE",
+  fairy: "#D685AD",
+};
 
-const PokemonDetail = styled.div`
-  font-size: 14px;
-`;
-
-export default function PokemonCard({ name, number, imageUrl, handleToggleSelectedPokemon }) {
+export default function PokemonCard({ name, number, imageUrl }) {
   const [selected, setSelected] = useState(false);
-  const [pokemonDetails, setPokemonDetails] = useState(null);
-
-  useEffect(() => {
-    const fetchPokemonDetails = async () => {
-      try {
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${number}`);
-        const data = await response.json();
-        setPokemonDetails(data);
-      } catch (error) {
-        console.error('Error fetching Pokemon details:', error);
-      }
-    };
-
-    fetchPokemonDetails();
-  }, [number]);
 
   useEffect(() => {
     const selectedPokemonString = localStorage.getItem('selectedPokemon');
@@ -154,26 +126,9 @@ export default function PokemonCard({ name, number, imageUrl, handleToggleSelect
       </PokemonImage>
       <PokemonNumber>{`#${number}`}</PokemonNumber>
       <PokemonName>{name.charAt(0).toUpperCase() + name.slice(1)}</PokemonName>
-      <PokemonTypesWrapper>
-        {pokemonDetails &&
-          pokemonDetails.types.map((type) => (
-            <PokemonType key={type.slot} type={type.type.name}>
-              {type.type.name}
-            </PokemonType>
-          ))}
-      </PokemonTypesWrapper>
-      <PokemonDetails>
-        {pokemonDetails && (
-          <>
-            <PokemonDetail>Height: {pokemonDetails.height} dm</PokemonDetail>
-            <PokemonDetail>Weight: {pokemonDetails.weight} hg</PokemonDetail>
-            <PokemonDetail>Base Experience: {pokemonDetails.base_experience}</PokemonDetail>
-            <PokemonDetail>Abilities: {pokemonDetails.abilities.map((ability) => ability.ability.name).join(', ')}</PokemonDetail>
-            <PokemonDetail>Stats: {pokemonDetails.stats.map((stat) => `${stat.stat.name}: ${stat.base_stat}`).join(', ')}</PokemonDetail>
-            {/* Add more details as needed */}
-          </>
-        )}
-      </PokemonDetails>
+      {/* Types */}
+      <PokemonType type="grass">Grass</PokemonType>
+      <PokemonType type="poison">Poison</PokemonType>
     </CardWrapper>
   );
 }
