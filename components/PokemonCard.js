@@ -1,15 +1,27 @@
-import styled from 'styled-components';
+import { useState, useEffect } from 'react';
+import styled, { css } from 'styled-components';
 import Image from 'next/image';
 
-const GridWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-
-  @media (max-width: 3840px) {
-    grid-template-columns: repeat(1, 1fr);
-  }
-`;
+const typeToColor = {
+  normal: '#A8A77A',
+  fire: '#EE8130',
+  water: '#6390F0',
+  electric: '#F7D02C',
+  grass: '#7AC74C',
+  ice: '#96D9D6',
+  fighting: '#C22E28',
+  poison: '#A33EA1',
+  ground: '#E2BF65',
+  flying: '#A98FF3',
+  psychic: '#F95587',
+  bug: '#A6B91A',
+  rock: '#B6A136',
+  ghost: '#735797',
+  dragon: '#6F35FC',
+  dark: '#705746',
+  steel: '#B7B7CE',
+  fairy: '#D685AD',
+};
 
 const CardWrapper = styled.div`
   width: 100%;
@@ -29,8 +41,23 @@ const CardWrapper = styled.div`
   margin-bottom: -10%;
   margin-top: 1%;
 
-  @media (max-width: 3840px) {
-    width: 100%;
+  ${(props) =>
+    props.selected &&
+    css`
+      border: 2px solid black;
+      box-shadow: 1px 10px 10px 1px rgba(0, 0, 0, 0.1);
+      transform: scale(1.05);
+      transition: transform 0.3s ease;
+    `}
+
+  &:hover {
+    ${(props) =>
+      !props.selected &&
+      css`
+        box-shadow: 1px 10px 10px 1px rgba(0, 0, 0, 0.1);
+        transform: scale(1.05);
+        transition: transform 0.2s ease-in;
+      `}
   }
 `;
 
@@ -42,22 +69,97 @@ const PokemonImage = styled.div`
 `;
 
 const PokemonNumber = styled.span`
-  font-size: 3vw;
+  font-size: min(3vw, 20px);
   font-weight: bold;
   margin-top: 8%;
 `;
 
 const PokemonName = styled.h3`
-  font-size: 4vw;
+  font-size: min(4vw, 20px);
   font-weight: bold;
   margin-top: 16%;
   text-transform: capitalize;
-  color: #333333;
 `;
 
-export default function PokemonCard({ name, number, imageUrl }) {
+const PokemonTypesWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 8px;
+`;
+
+const PokemonType = styled.span`
+  background-color: ${(props) => typeToColor[props.type]};
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin: 4px;
+`;
+
+export default function PokemonCard({
+  name,
+  number,
+  imageUrl,
+  handleToggleSelectedPokemon,
+}) {
+  const [selected, setSelected] = useState(false);
+  const [pokemonDetails, setPokemonDetails] = useState(null);
+
+  useEffect(() => {
+    const fetchPokemonDetails = async () => {
+      try {
+        const response = await fetch(
+          `https://pokeapi.co/api/v2/pokemon/${number}`
+        );
+        const data = await response.json();
+        setPokemonDetails(data);
+      } catch (error) {
+        console.error('Error fetching Pokemon-Details:', error);
+      }
+    };
+
+    fetchPokemonDetails();
+  }, [number]);
+
+  useEffect(() => {
+    const selectedPokemonString = localStorage.getItem('selectedPokemon');
+    const selectedPokemon = selectedPokemonString
+      ? JSON.parse(selectedPokemonString)
+      : [];
+    const isSelected = selectedPokemon.some((p) => p.number === number);
+    setSelected(isSelected);
+  }, [number]);
+
+  const handleToggleSelect = () => {
+    const selectedPokemonString = localStorage.getItem('selectedPokemon');
+    const selectedPokemon = selectedPokemonString
+      ? JSON.parse(selectedPokemonString)
+      : [];
+
+    if (selected) {
+      setSelected(false);
+      const updatedSelectedPokemon = selectedPokemon.filter(
+        (p) => p.number !== number
+      );
+      localStorage.setItem(
+        'selectedPokemon',
+        JSON.stringify(updatedSelectedPokemon)
+      );
+    } else if (selectedPokemon.length < 6) {
+      setSelected(true);
+      const updatedSelectedPokemon = [
+        ...selectedPokemon,
+        { name, number, imageUrl, id: Date.now() },
+      ];
+      localStorage.setItem(
+        'selectedPokemon',
+        JSON.stringify(updatedSelectedPokemon)
+      );
+    }
+  };
+
   return (
-    <CardWrapper>
+    <CardWrapper selected={selected} onClick={handleToggleSelect}>
       <PokemonImage imageUrl={imageUrl}>
         <Image
           src={imageUrl}
@@ -69,6 +171,14 @@ export default function PokemonCard({ name, number, imageUrl }) {
       </PokemonImage>
       <PokemonNumber>{`#${number}`}</PokemonNumber>
       <PokemonName>{name.charAt(0).toUpperCase() + name.slice(1)}</PokemonName>
+      <PokemonTypesWrapper>
+        {pokemonDetails &&
+          pokemonDetails.types.map((type) => (
+            <PokemonType key={type.type.name} type={type.type.name}>
+              {type.type.name}
+            </PokemonType>
+          ))}
+      </PokemonTypesWrapper>
     </CardWrapper>
   );
 }
