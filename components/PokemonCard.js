@@ -96,25 +96,26 @@ const PokemonType = styled.span`
   margin: 4px;
 `;
 
-export default function PokemonCard({
-  name,
-  number,
-  imageUrl,
-  handleToggleSelectedPokemon,
-}) {
+const PokemonDetails = styled.div`
+  margin-top: 16px;
+`;
+
+const PokemonDetail = styled.div`
+  font-size: 14px;
+`;
+
+export default function PokemonCard({ name, number, imageUrl, handleToggleSelectedPokemon }) {
   const [selected, setSelected] = useState(false);
   const [pokemonDetails, setPokemonDetails] = useState(null);
 
   useEffect(() => {
     const fetchPokemonDetails = async () => {
       try {
-        const response = await fetch(
-          `https://pokeapi.co/api/v2/pokemon/${number}`
-        );
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${number}`);
         const data = await response.json();
         setPokemonDetails(data);
       } catch (error) {
-        console.error('Error fetching Pokemon-Details:', error);
+        console.error('Error fetching Pokemon details:', error);
       }
     };
 
@@ -123,62 +124,56 @@ export default function PokemonCard({
 
   useEffect(() => {
     const selectedPokemonString = localStorage.getItem('selectedPokemon');
-    const selectedPokemon = selectedPokemonString
-      ? JSON.parse(selectedPokemonString)
-      : [];
+    const selectedPokemon = selectedPokemonString ? JSON.parse(selectedPokemonString) : [];
     const isSelected = selectedPokemon.some((p) => p.number === number);
     setSelected(isSelected);
   }, [number]);
 
   const handleToggleSelect = () => {
     const selectedPokemonString = localStorage.getItem('selectedPokemon');
-    const selectedPokemon = selectedPokemonString
-      ? JSON.parse(selectedPokemonString)
-      : [];
+    const selectedPokemon = selectedPokemonString ? JSON.parse(selectedPokemonString) : [];
 
     if (selected) {
       setSelected(false);
-      const updatedSelectedPokemon = selectedPokemon.filter(
-        (p) => p.number !== number
-      );
-      localStorage.setItem(
-        'selectedPokemon',
-        JSON.stringify(updatedSelectedPokemon)
-      );
+      const updatedSelectedPokemon = selectedPokemon.filter((p) => p.number !== number);
+      localStorage.setItem('selectedPokemon', JSON.stringify(updatedSelectedPokemon));
     } else if (selectedPokemon.length < 6) {
       setSelected(true);
       const updatedSelectedPokemon = [
         ...selectedPokemon,
         { name, number, imageUrl, id: Date.now() },
       ];
-      localStorage.setItem(
-        'selectedPokemon',
-        JSON.stringify(updatedSelectedPokemon)
-      );
+      localStorage.setItem('selectedPokemon', JSON.stringify(updatedSelectedPokemon));
     }
   };
 
   return (
     <CardWrapper selected={selected} onClick={handleToggleSelect}>
       <PokemonImage imageUrl={imageUrl}>
-        <Image
-          src={imageUrl}
-          alt={name}
-          layout="fill"
-          objectFit="contain"
-          priority
-        />
+        <Image src={imageUrl} alt={name} layout="fill" objectFit="contain" priority />
       </PokemonImage>
       <PokemonNumber>{`#${number}`}</PokemonNumber>
       <PokemonName>{name.charAt(0).toUpperCase() + name.slice(1)}</PokemonName>
       <PokemonTypesWrapper>
         {pokemonDetails &&
           pokemonDetails.types.map((type) => (
-            <PokemonType key={type.type.name} type={type.type.name}>
+            <PokemonType key={type.slot} type={type.type.name}>
               {type.type.name}
             </PokemonType>
           ))}
       </PokemonTypesWrapper>
+      <PokemonDetails>
+        {pokemonDetails && (
+          <>
+            <PokemonDetail>Height: {pokemonDetails.height} dm</PokemonDetail>
+            <PokemonDetail>Weight: {pokemonDetails.weight} hg</PokemonDetail>
+            <PokemonDetail>Base Experience: {pokemonDetails.base_experience}</PokemonDetail>
+            <PokemonDetail>Abilities: {pokemonDetails.abilities.map((ability) => ability.ability.name).join(', ')}</PokemonDetail>
+            <PokemonDetail>Stats: {pokemonDetails.stats.map((stat) => `${stat.stat.name}: ${stat.base_stat}`).join(', ')}</PokemonDetail>
+            {/* Add more details as needed */}
+          </>
+        )}
+      </PokemonDetails>
     </CardWrapper>
   );
 }
