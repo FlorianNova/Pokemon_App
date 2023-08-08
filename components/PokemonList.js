@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import PokemonCard from './PokemonCard';
 import fetchPokemonData from '../services/fetchPokemonData';
-import styled from 'styled-components';
+import PokemonCard from './PokemonCard';
+import styled, { css } from 'styled-components';
 import { animateScroll as scroll } from 'react-scroll';
-import { RiMenuLine } from 'react-icons/ri';
 
 const GridWrapper = styled.div`
   display: grid;
@@ -89,26 +88,6 @@ const ScrollToBottomButton = styled(ScrollButtons)`
       document.documentElement.scrollHeight - window.innerHeight
       ? 'block'
       : 'none'};
-`;
-
-const MenuButton = styled.button`
-  position: fixed;
-  top: 2vw;
-  left: 2vw;
-  background-color: #ffd700;
-  color: black;
-  padding: 2vw;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 2vw;
-  border: none;
-  outline: none;
-  z-index: 10;
-
-  &:hover {
-    background-color: #e2c100;
-    transform: scale(1.05);
-  }
 `;
 
 export default function PokemonList() {
@@ -208,6 +187,7 @@ export default function PokemonList() {
             name={pokemon.name}
             number={pokemon.id}
             imageUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
+            handleToggleSelectedPokemon={() => {}} // Replace with your function to handle selecting/deselecting Pokemon
           />
         ))}
       </GridWrapper>
