@@ -53,7 +53,7 @@ const SearchBar = styled.input`
   }
 `;
 
-const ActionButton = styled.button`
+const ScrollButtons = styled.button`
   position: fixed;
   background-color: transparent;
   color: black;
@@ -72,13 +72,13 @@ const ActionButton = styled.button`
   }
 `;
 
-const ScrollToTopButton = styled(ActionButton)`
+const ScrollToTopButton = styled(ScrollButtons)`
   bottom: 20px;
   left: 20px;
   z-index: 10;
 `;
 
-const ScrollToBottomButton = styled(ActionButton)`
+const ScrollToBottomButton = styled(ScrollButtons)`
   bottom: 20px;
   right: 20px;
   z-index: 10;
@@ -89,26 +89,6 @@ const ScrollToBottomButton = styled(ActionButton)`
       document.documentElement.scrollHeight - window.innerHeight
       ? 'block'
       : 'none'};
-`;
-
-const SaveTeamsButton = styled.button`
-  position: fixed;
-  top: 2vw;
-  right: 2vw;
-  background-color: lightgreen;
-  color: white;
-  padding: 2vw;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 2vw;
-  border: none;
-  outline: none;
-  z-index: 10;
-
-  &:hover {
-    background-color: #8fcf8b;
-    transform: scale(1.05);
-  }
 `;
 
 const MenuButton = styled.button`
@@ -131,82 +111,12 @@ const MenuButton = styled.button`
   }
 `;
 
-const ModalWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 20;
-`;
-
-const ModalContent = styled.div`
-  background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 20;
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  color: black;
-  border: 1px solid;
-  cursor: pointer;
-  font-size: 10vw;
-  border-radius: 10px;
-  background-color: white;
-
-  &:hover {
-    transform: scale(1.05);
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    background-color: darkGray;
-  }
-`;
-
-const DeleteButton = styled.button`
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  color: black;
-  border: 1px solid;
-  cursor: pointer;
-  font-size: 10vw;
-  border-radius: 10px;
-  background-color: white;
-
-  &:hover {
-    transform: scale(1.05);
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-`;
-
-const SavedPokemonList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-`;
-
-const SavedPokemonItem = styled.li`
-  margin-bottom: 10px;
-`;
-
 export default function PokemonList() {
   const [pokemonData, setPokemonData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [selectedPokemonList, setSelectedPokemonList] = useState([]);
-  const [showSavedPokemonModal, setShowSavedPokemonModal] = useState(false);
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -257,15 +167,6 @@ export default function PokemonList() {
     };
   }, []);
 
-  useEffect(() => {
-    const storedSelectedPokemonList = localStorage.getItem(
-      'selectedPokemonList'
-    );
-    if (storedSelectedPokemonList) {
-      setSelectedPokemonList(JSON.parse(storedSelectedPokemonList));
-    }
-  }, []);
-
   const filteredPokemon = pokemonData.filter((pokemon) => {
     if (searchTerm === '') return true;
     return (
@@ -282,37 +183,9 @@ export default function PokemonList() {
     scroll.scrollToBottom();
   };
 
-  const handleSaveSelectedPokemon = (pokemon) => {
-    const updatedSelectedPokemonList = [...selectedPokemonList, pokemon];
-    setSelectedPokemonList(updatedSelectedPokemonList);
-    localStorage.setItem(
-      'selectedPokemonList',
-      JSON.stringify(updatedSelectedPokemonList)
-    );
-  };
-
-  const handleShowSavedPokemon = () => {
-    setShowSavedPokemonModal(true);
-  };
-
-  const handleDeletePokemon = (pokemonNumber) => {
-    const updatedList = selectedPokemonList.filter(
-      (pokemon) => pokemon.number !== pokemonNumber
-    );
-    setSelectedPokemonList(updatedList);
-    localStorage.setItem('selectedPokemonList', JSON.stringify(updatedList));
-  };
-
-  const handleCloseModal = () => {
-    setShowSavedPokemonModal(false);
-  };
-
   return (
     <div>
-      <ScrollToTopButton
-        visible={showScrollToTop}
-        onClick={handleScrollToTop}
-      >
+      <ScrollToTopButton visible={showScrollToTop} onClick={handleScrollToTop}>
         &#8679;
       </ScrollToTopButton>
       <ScrollToBottomButton
@@ -322,36 +195,6 @@ export default function PokemonList() {
       >
         &#8681;
       </ScrollToBottomButton>
-      <SaveTeamsButton onClick={handleShowSavedPokemon}>
-        Save Teams
-      </SaveTeamsButton>
-      <MenuButton onClick={handleShowSavedPokemon}>
-        <RiMenuLine size={24} />
-      </MenuButton>
-      {showSavedPokemonModal && (
-        <ModalWrapper>
-          <ModalContent>
-            <CloseButton onClick={handleCloseModal}>&times;</CloseButton>
-            <h2>Saved Pokémon</h2>
-            {selectedPokemonList.length > 0 ? (
-              <SavedPokemonList>
-                {selectedPokemonList.map((pokemon) => (
-                  <SavedPokemonItem key={pokemon.number}>
-                    {pokemon.name} (Number: {pokemon.number})
-                    <DeleteButton
-                      onClick={() => handleDeletePokemon(pokemon.number)}
-                    >
-                      &#x2716;
-                    </DeleteButton>
-                  </SavedPokemonItem>
-                ))}
-              </SavedPokemonList>
-            ) : (
-              <p>No saved Pokémon.</p>
-            )}
-          </ModalContent>
-        </ModalWrapper>
-      )}
       <SearchBar
         type="text"
         placeholder="Search for Pokémon..."
@@ -365,7 +208,6 @@ export default function PokemonList() {
             name={pokemon.name}
             number={pokemon.id}
             imageUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
-            handleSaveSelectedPokemon={handleSaveSelectedPokemon}
           />
         ))}
       </GridWrapper>
