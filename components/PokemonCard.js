@@ -98,17 +98,28 @@ const PokemonType = styled.span`
 `;
 
 const PokemonDetails = styled.div`
-  padding: 10px;
+  padding: 1px;
   text-align: left;
-  font-size: 1,5vw;
+  font-size: min(4vw, 20px);
+  border: 1px solid #ddd;
+  border: none;
+  margin-top: 1px;
 `;
+
+const PokemonDetailItem = styled.div`
+  margin-top: 1px;
+  padding: 1px;
+`;
+
 const PokemonStats = styled.div`
-  margin-top: 10px;
+  margin-top: 2px;
 `;
 
 const PokemonStat = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-top: 1px;
+  padding: 1px;
 `;
 
 export default function PokemonCard({
@@ -124,7 +135,7 @@ export default function PokemonCard({
     const fetchPokemonDetails = async () => {
       try {
         const response = await fetch(
-          `https://pokeapi.co/api/v2/pokemon/${number}`
+          `https://pokeapi.co/api/v2/pokemon/${name}`
         );
         const data = await response.json();
         setPokemonDetails(data);
@@ -134,7 +145,7 @@ export default function PokemonCard({
     };
 
     fetchPokemonDetails();
-  }, [number]);
+  }, [name]);
 
   const handleToggleExpand = () => {
     setExpanded(!expanded);
@@ -155,22 +166,28 @@ export default function PokemonCard({
       <PokemonName>{name.charAt(0).toUpperCase() + name.slice(1)}</PokemonName>
       {expanded && (
         <PokemonDetails>
-          <strong>Type:</strong>
-          <PokemonTypesWrapper>
-            {pokemonDetails?.types.map((type) => (
-              <PokemonType key={type.type.name} type={type.type.name}>
-                {type.type.name}
-              </PokemonType>
+          <PokemonDetailItem>
+            <strong>Type:</strong>
+            <PokemonTypesWrapper>
+              {pokemonDetails?.types.map((type) => (
+                <PokemonType key={type.type.name} type={type.type.name}>
+                  {type.type.name}
+                </PokemonType>
+              ))}
+            </PokemonTypesWrapper>
+          </PokemonDetailItem>
+          <PokemonDetailItem>
+            <strong>Abilities:</strong>{' '}
+            {pokemonDetails?.abilities.map((ability) => (
+              <span key={ability.ability.name}>{ability.ability.name}</span>
             ))}
-          </PokemonTypesWrapper>
-          <strong>Height:</strong> {pokemonDetails?.height}
-          <br />
-          <strong>Weight:</strong> {pokemonDetails?.weight}
-          <br />
-          <strong>Abilities:</strong>{' '}
-          {pokemonDetails?.abilities.map((ability) => (
-            <span key={ability.ability.name}>{ability.ability.name}</span>
-          ))}
+          </PokemonDetailItem>
+          <PokemonDetailItem>
+            <strong>Height:</strong> {pokemonDetails?.height}
+          </PokemonDetailItem>
+          <PokemonDetailItem>
+            <strong>Weight:</strong> {pokemonDetails?.weight}
+          </PokemonDetailItem>
           <PokemonStats>
             <strong>Base Stats:</strong>
             {pokemonDetails?.stats.map((stat) => (
