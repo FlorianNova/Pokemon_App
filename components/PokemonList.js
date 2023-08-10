@@ -190,6 +190,20 @@ export default function PokemonList() {
     setIsComparing(true);
   };
 
+  const handlePokemonCardClick = (pokemonName) => {
+    if (isComparing) {
+      setSelectedPokemon((prevSelected) => {
+        if (!prevSelected.pokemon1) {
+          return { ...prevSelected, pokemon1: pokemonName };
+        } else if (!prevSelected.pokemon2) {
+          return { ...prevSelected, pokemon2: pokemonName };
+        } else {
+          return prevSelected;
+        }
+      });
+    }
+  };
+
   return (
     <div>
       <ScrollToTopButton visible={showScrollToTop} onClick={handleScrollToTop}>
@@ -202,7 +216,9 @@ export default function PokemonList() {
       >
         &#8681;
       </ScrollToBottomButton>
-      <CompareButton onClick={handleCompareClick}>Compare Pokémon</CompareButton>
+      <CompareButton onClick={handleCompareClick}>
+        Compare Pokémon
+      </CompareButton>
       <SearchBar
         type="text"
         placeholder="Search for Pokémon..."
@@ -216,7 +232,11 @@ export default function PokemonList() {
             name={pokemon.name}
             number={pokemon.id}
             imageUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
-            handleToggleSelectedPokemon={() => {}} // Replace with your function to handle selecting/deselecting Pokemon
+            onClick={() => handlePokemonCardClick(pokemon.name)}
+            selected={
+              selectedPokemon.pokemon1 === pokemon.name ||
+              selectedPokemon.pokemon2 === pokemon.name
+            }
           />
         ))}
       </GridWrapper>

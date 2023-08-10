@@ -157,31 +157,28 @@ export default function PokemonCard({
         <PokemonDetails>
           <strong>Type:</strong>
           <PokemonTypesWrapper>
-            {pokemonDetails &&
-              pokemonDetails.types.map((type) => (
-                <PokemonType key={type.type.name} type={type.type.name}>
-                  {type.type.name}
-                </PokemonType>
-              ))}
+            {pokemonDetails?.types.map((type) => (
+              <PokemonType key={type.type.name} type={type.type.name}>
+                {type.type.name}
+              </PokemonType>
+            ))}
           </PokemonTypesWrapper>
-          <strong>Height:</strong> {pokemonDetails.height}
+          <strong>Height:</strong> {pokemonDetails?.height}
           <br />
-          <strong>Weight:</strong> {pokemonDetails.weight}
+          <strong>Weight:</strong> {pokemonDetails?.weight}
           <br />
           <strong>Abilities:</strong>{' '}
-          {pokemonDetails &&
-            pokemonDetails.abilities.map((ability) => (
-              <span key={ability.ability.name}>{ability.ability.name}</span>
-            ))}
+          {pokemonDetails?.abilities.map((ability) => (
+            <span key={ability.ability.name}>{ability.ability.name}</span>
+          ))}
           <PokemonStats>
             <strong>Base Stats:</strong>
-            {pokemonDetails &&
-              pokemonDetails.stats.map((stat) => (
-                <PokemonStat key={stat.stat.name}>
-                  <span>{stat.stat.name}:</span>
-                  <span>{stat.base_stat}</span>
-                </PokemonStat>
-              ))}
+            {pokemonDetails?.stats.map((stat) => (
+              <PokemonStat key={stat.stat.name}>
+                <span>{stat.stat.name}:</span>
+                <span>{stat.base_stat}</span>
+              </PokemonStat>
+            ))}
           </PokemonStats>
         </PokemonDetails>
       )}
