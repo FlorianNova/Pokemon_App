@@ -57,6 +57,7 @@ const CardWrapper = styled.div`
         box-shadow: 1px 10px 10px 1px rgba(0, 0, 0, 0.1);
         transform: scale(1.05);
         transition: transform 0.2s ease-in;
+        cursor: pointer;
       `}
   }
 `;
@@ -99,7 +100,7 @@ const PokemonType = styled.span`
 const PokemonDetails = styled.div`
   padding: 10px;
   text-align: left;
-  font-size: 14px;
+  font-size: 1,5vw;
 `;
 const PokemonStats = styled.div`
   margin-top: 10px;
@@ -154,7 +155,7 @@ export default function PokemonCard({
       <PokemonName>{name.charAt(0).toUpperCase() + name.slice(1)}</PokemonName>
       {expanded && (
         <PokemonDetails>
-          <strong>Types:</strong>
+          <strong>Type:</strong>
           <PokemonTypesWrapper>
             {pokemonDetails &&
               pokemonDetails.types.map((type) => (

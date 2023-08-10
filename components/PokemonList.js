@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import fetchPokemonData from '../services/fetchPokemonData';
 import PokemonCard from './PokemonCard';
-import styled, { css } from 'styled-components';
+import PokemonTypeCompareDisplay from './BattleSimulator';
+import styled from 'styled-components';
 import { animateScroll as scroll } from 'react-scroll';
 
 const GridWrapper = styled.div`
@@ -90,12 +91,35 @@ const ScrollToBottomButton = styled(ScrollButtons)`
       : 'none'};
 `;
 
+const CompareButton = styled.button`
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
 export default function PokemonList() {
   const [pokemonData, setPokemonData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [isComparing, setIsComparing] = useState(false);
+  const [selectedPokemon, setSelectedPokemon] = useState({
+    pokemon1: '',
+    pokemon2: '',
+  });
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -162,6 +186,10 @@ export default function PokemonList() {
     scroll.scrollToBottom();
   };
 
+  const handleCompareClick = () => {
+    setIsComparing(true);
+  };
+
   return (
     <div>
       <ScrollToTopButton visible={showScrollToTop} onClick={handleScrollToTop}>
@@ -174,6 +202,7 @@ export default function PokemonList() {
       >
         &#8681;
       </ScrollToBottomButton>
+      <CompareButton onClick={handleCompareClick}>Compare Pokémon</CompareButton>
       <SearchBar
         type="text"
         placeholder="Search for Pokémon..."
@@ -191,6 +220,12 @@ export default function PokemonList() {
           />
         ))}
       </GridWrapper>
+      {isComparing && (
+        <PokemonTypeCompareDisplay
+          pokemon1={selectedPokemon.pokemon1}
+          pokemon2={selectedPokemon.pokemon2}
+        />
+      )}
     </div>
   );
 }
