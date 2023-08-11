@@ -92,3 +92,20 @@ export const compareTypes = (type1, type2) => {
     return effectiveness.notVeryEffective;
   return effectiveness.veryEffective;
 };
+
+export const getEffectivenessText = (effectivenessValue) => {
+  switch (effectivenessValue) {
+    case effectiveness.superEffective:
+      return 'Super effective!';
+    case effectiveness.veryEffective:
+      return 'Very effective!';
+    case effectiveness.normalEffective:
+      return 'Normal effective';
+    case effectiveness.notVeryEffective:
+      return 'Not very effective...';
+    case effectiveness.noEffect:
+      return 'No effect';
+    default:
+      return 'Unknown';
+  }
+};

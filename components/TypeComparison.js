@@ -75,7 +75,8 @@ const TypeComparison = () => {
             <ul>
               {Object.keys(types).map((type, index) => (
                 <li key={index}>
-                  {type}: {getEffectivenessText(compareTypes(selectedType, type))}
+                  {type}:{' '}
+                  {getEffectivenessText(compareTypes(selectedType, type))}
                 </li>
               ))}
             </ul>
