@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { colors, compareTypes, types } from './typeUtils';
+import { colors, compareTypes, getEffectivenessText, types } from './typeUtils';
 
 const PopupWrapper = styled.div`
   position: fixed;
@@ -46,56 +46,44 @@ const TypeButton = styled.button`
   cursor: pointer;
 `;
 
-export default function BattleSimulator() {
+const TypeComparison = () => {
   const [selectedType, setSelectedType] = useState(null);
-  const [showTypePopup, setShowTypePopup] = useState(false);
-  const [showEffectivenessPopup, setShowEffectivenessPopup] = useState(false);
 
   const handleTypeClick = (type) => {
     setSelectedType(type);
-    setShowTypePopup(false);
-    setShowEffectivenessPopup(true);
-  };
-
-  const handleCompareClick = () => {
-    setShowTypePopup(true);
   };
 
   return (
-    <div>
-      <button onClick={handleCompareClick}>Compare Pokemon</button>
-      {showTypePopup && (
-        <PopupWrapper>
-          <PopupContent>
-            <CloseButton onClick={() => setShowTypePopup(false)}>X</CloseButton>
-            <h1>Select a Pokemon Type</h1>
-            {types.map((type) => (
-              <TypeButton
-                key={type}
-                type={type}
-                onClick={() => handleTypeClick(type)}
-              >
-                {type}
-              </TypeButton>
-            ))}
-          </PopupContent>
-        </PopupWrapper>
-      )}
-      {showEffectivenessPopup && (
-        <PopupWrapper>
-          <PopupContent>
-            <CloseButton onClick={() => setShowEffectivenessPopup(false)}>
-              X
-            </CloseButton>
-            <h1>Effectiveness Against Other Types</h1>
-            {types.map((otherType) => (
-              <p key={otherType}>
-                {otherType}: {compareTypes(selectedType, otherType)}
-              </p>
-            ))}
-          </PopupContent>
-        </PopupWrapper>
-      )}
-    </div>
+    <PopupWrapper>
+      <PopupContent>
+        <CloseButton onClick={() => setSelectedType(null)}>X</CloseButton>
+        <h2>Select a Pokémon Type</h2>
+        <div>
+          {Object.keys(types).map((type, index) => (
+            <TypeButton
+              key={index}
+              type={type}
+              onClick={() => handleTypeClick(type)}
+            >
+              {type}
+            </TypeButton>
+          ))}
+        </div>
+        {selectedType && (
+          <div>
+            <h3>Effectiveness against {selectedType}:</h3>
+            <ul>
+              {Object.keys(types).map((type, index) => (
+                <li key={index}>
+                  {type}: {getEffectivenessText(compareTypes(selectedType, type))}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </PopupContent>
+    </PopupWrapper>
   );
-}
+};
+
+export default TypeComparison;

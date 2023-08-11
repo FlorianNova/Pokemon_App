@@ -1,30 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { getEffectivenessText, colors, compareTypes } from './typeUtils';
+import { colors, compareTypes, types } from './typeUtils';
+import TypeComparison from './TypeComparison';
 
-const PopupOverlay = styled.div`
+const PopupWrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
-  font-weight: bold;
-  font-size: 20px;
 `;
 
-const PopupWrapper = styled.div`
+const PopupContent = styled.div`
+  position: relative;
+  padding: 20px;
   background-color: #fff;
   border: 2px solid #ddd;
   border-radius: 10px;
-  padding: 20px;
-  position: relative;
-  width: 80%;
-  max-width: 500px;
+  max-width: 90%;
+  max-height: 90%;
+  overflow-y: auto;
 `;
 
 const CloseButton = styled.button`
@@ -37,113 +37,68 @@ const CloseButton = styled.button`
   color: red;
 `;
 
-const BattleSimulatorWrapper = styled.div`
-  margin-top: 30px;
-  padding: 20px;
-  border: 2px solid #ddd;
-  border-radius: 10px;
-  background-color: #f5f5f5;
-  text-align: center;
+const TypeButton = styled.button`
+  margin: 5px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: ${(props) => colors[props.type]};
+  color: white;
+  cursor: pointer;
 `;
 
-const Result = styled.div`
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 10px;
-`;
+export default function BattleSimulator() {
+  const [selectedType, setSelectedType] = useState(null);
+  const [showTypePopup, setShowTypePopup] = useState(false);
+  const [showEffectivenessPopup, setShowEffectivenessPopup] = useState(false);
 
-const EffectivenessText = styled.p`
-  color: ${(props) => props.color};
-`;
+  const handleTypeClick = (type) => {
+    setSelectedType(type);
+    setShowTypePopup(false);
+    setShowEffectivenessPopup(true);
+  };
 
-const getPokemonTypes = async (pokemonName) => {
-  try {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${pokemonName}`
-    );
-    const data = await response.json();
-    const types = data.types.map((type) => type.type.name);
-    return types;
-  } catch (error) {
-    console.error('Error fetching Pokemon types:', error);
-    return [];
-  }
-};
-
-export default function BattleSimulator({ pokemon1, pokemon2 }) {
-  const [showPopup, setShowPopup] = useState(false);
-  const [result, setResult] = useState('');
-
-  useEffect(() => {
-    if (!pokemon1 || !pokemon2) {
-      setShowPopup(true);
-      setResult('Please select two Pokémon to compare.');
-      return;
-    }
-
-    const pokemonTypeCompare = async (pokemon1, pokemon2) => {
-      const pokemon1Types = await getPokemonTypes(pokemon1);
-      const pokemon2Types = await getPokemonTypes(pokemon2);
-
-      let pokemon1Effectiveness = 1;
-      let pokemon2Effectiveness = 1;
-
-      for (let type1 of pokemon1Types) {
-        for (let type2 of pokemon2Types) {
-          pokemon1Effectiveness *= compareTypes(type1, type2);
-          pokemon2Effectiveness *= compareTypes(type2, type1);
-        }
-      }
-
-      return {
-        pokemon1Effectiveness,
-        pokemon2Effectiveness,
-      };
-    };
-
-    pokemonTypeCompare(pokemon1, pokemon2).then(
-      ({ pokemon1Effectiveness, pokemon2Effectiveness }) => {
-        setResult(
-          <BattleSimulatorWrapper>
-            <h1>Pokémon Type Compare</h1>
-            <h2>
-              {pokemon1} vs {pokemon2}
-            </h2>
-            <p>
-              The Type of {pokemon1} is{' '}
-              <EffectivenessText
-                color={colors[getEffectivenessText(pokemon1Effectiveness)]}
-              >
-                {getEffectivenessText(pokemon1Effectiveness)}
-              </EffectivenessText>{' '}
-              against {pokemon2}.
-            </p>
-            <p>
-              The Type of {pokemon2} is{' '}
-              <EffectivenessText
-                color={colors[getEffectivenessText(pokemon2Effectiveness)]}
-              >
-                {getEffectivenessText(pokemon2Effectiveness)}
-              </EffectivenessText>{' '}
-              against {pokemon1}.
-            </p>
-          </BattleSimulatorWrapper>
-        );
-        setShowPopup(true);
-      }
-    );
-  }, [pokemon1, pokemon2]);
+  const handleCompareClick = () => {
+    setShowTypePopup(true);
+  };
 
   return (
-    <>
-      {showPopup && (
-        <PopupOverlay>
-          <PopupWrapper>
-            <CloseButton onClick={() => setShowPopup(false)}>X</CloseButton>
-            {result}
-          </PopupWrapper>
-        </PopupOverlay>
+    <div>
+      <button onClick={handleCompareClick}>Compare Pokemon</button>
+      {showTypePopup && (
+        <PopupWrapper>
+          <PopupContent>
+            <CloseButton onClick={() => setShowTypePopup(false)}>X</CloseButton>
+            <h1>Select a Pokemon Type</h1>
+            {types.map((type) => (
+              <TypeButton
+                key={type}
+                type={type}
+                onClick={() => handleTypeClick(type)}
+              >
+                {type}
+              </TypeButton>
+            ))}
+          </PopupContent>
+        </PopupWrapper>
       )}
-    </>
+      {showEffectivenessPopup && (
+        <PopupWrapper>
+          <PopupContent>
+            <CloseButton onClick={() => setShowEffectivenessPopup(false)}>
+              X
+            </CloseButton>
+            <h1>Effectiveness Against Other Types</h1>
+            {types.map((otherType) => (
+              <p key={otherType}>
+                {otherType}: {compareTypes(selectedType, otherType)}
+              </p>
+            ))}
+          </PopupContent>
+        </PopupWrapper>
+      )}
+      {/* Füge den TypeComparison hier ein */}
+      <TypeComparison />
+    </div>
   );
 }
