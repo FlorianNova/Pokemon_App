@@ -1,7 +1,7 @@
-const getPokemonTypes = async (pokemonName) => {
+const getPokemonTypes = async (name) => {
   try {
     const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${pokemonName}`
+      `https://pokeapi.co/api/v2/pokemon/${name}`
     );
     const data = await response.json();
     const types = data.types.map((type) => type.type.name);

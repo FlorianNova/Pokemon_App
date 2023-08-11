@@ -126,7 +126,6 @@ export default function PokemonCard({
   name,
   number,
   imageUrl,
-  handleToggleSelectedPokemon,
 }) {
   const [expanded, setExpanded] = useState(false);
   const [pokemonDetails, setPokemonDetails] = useState(null);
