@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import Image from 'next/image';
 
-const typeToColor = {
+export const typeToColor = {
   normal: '#A8A77A',
   fire: '#EE8130',
   water: '#6390F0',

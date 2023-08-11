@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { colors, compareTypes, getEffectivenessText, types } from './typeUtils';
+import { compareTypes, getEffectivenessText } from './typeUtils';
 
 const PopupWrapper = styled.div`
   position: fixed;
@@ -36,52 +36,19 @@ const CloseButton = styled.button`
   color: red;
 `;
 
-const TypeButton = styled.button`
-  margin: 5px;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: ${(props) => colors[props.type]};
-  color: white;
-  cursor: pointer;
-`;
-
-const TypeComparison = () => {
-  const [selectedType, setSelectedType] = useState(null);
-
-  const handleTypeClick = (type) => {
-    setSelectedType(type);
-  };
-
+const TypeComparison = ({ attackerType, defenderType, onClose }) => {
   return (
     <PopupWrapper>
       <PopupContent>
-        <CloseButton onClick={() => setSelectedType(null)}>X</CloseButton>
-        <h2>Select a Pokémon Type</h2>
-        <div>
-          {Object.keys(types).map((type, index) => (
-            <TypeButton
-              key={index}
-              type={type}
-              onClick={() => handleTypeClick(type)}
-            >
-              {type}
-            </TypeButton>
-          ))}
-        </div>
-        {selectedType && (
-          <div>
-            <h3>Effectiveness against {selectedType}:</h3>
-            <ul>
-              {Object.keys(types).map((type, index) => (
-                <li key={index}>
-                  {type}:{' '}
-                  {getEffectivenessText(compareTypes(selectedType, type))}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <CloseButton onClick={onClose}>X</CloseButton>
+        <h3>{attackerType} effectiveness against {defenderType}:</h3>
+        <p>
+          {getEffectivenessText(
+            compareTypes(attackerType, defenderType),
+            attackerType,
+            defenderType
+          )}
+        </p>
       </PopupContent>
     </PopupWrapper>
   );
