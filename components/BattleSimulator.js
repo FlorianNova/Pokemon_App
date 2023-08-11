@@ -97,7 +97,7 @@ export default function BattleSimulator() {
           </PopupContent>
         </PopupWrapper>
       )}
-      {/* Füge den TypeComparison hier ein */}
+      {/* Type Comparison insert here */}
       <TypeComparison />
     </div>
   );

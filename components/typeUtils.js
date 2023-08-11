@@ -1,32 +1,43 @@
 export const types = {
-  normal: { weak: ['fighting'], resist: ['ghost'] },
+  normal: {
+    weak: ['fighting'],
+    resist: [],
+    immune: ['ghost'],
+  },
   fighting: {
     weak: ['flying', 'psychic', 'fairy'],
-    resist: ['rock', 'bug', 'dark'],
+    resist: ['bug', 'rock', 'dark'],
+    immune: [],
   },
   flying: {
     weak: ['rock', 'electric', 'ice'],
-    resist: ['fighting', 'ground', 'grass', 'bug'],
+    resist: ['fighting', 'bug', 'grass'],
+    immune: [],
   },
   poison: {
     weak: ['ground', 'psychic'],
-    resist: ['fighting', 'poison', 'grass', 'fairy'],
+    resist: ['fighting', 'poison', 'bug', 'grass', 'fairy'],
+    immune: [],
   },
   ground: {
     weak: ['water', 'grass', 'ice'],
     resist: ['poison', 'rock', 'electric'],
+    immune: ['electric'],
   },
   rock: {
     weak: ['fighting', 'ground', 'steel', 'water', 'grass'],
     resist: ['normal', 'flying', 'poison', 'fire'],
+    immune: [],
   },
   bug: {
     weak: ['flying', 'rock', 'fire'],
     resist: ['fighting', 'ground', 'grass'],
+    immune: [],
   },
   ghost: {
     weak: ['ghost', 'dark'],
-    resist: ['normal', 'fighting', 'poison', 'bug'],
+    resist: ['poison', 'bug'],
+    immune: ['normal', 'fighting'],
   },
   steel: {
     weak: ['fighting', 'ground', 'fire'],
@@ -42,39 +53,53 @@ export const types = {
       'dragon',
       'fairy',
     ],
+    immune: ['poison'],
   },
   fire: {
     weak: ['ground', 'rock', 'water'],
     resist: ['bug', 'steel', 'fire', 'grass', 'ice'],
+    immune: [],
   },
   water: {
     weak: ['grass', 'electric'],
     resist: ['steel', 'fire', 'water', 'ice'],
+    immune: [],
   },
   grass: {
     weak: ['flying', 'poison', 'bug', 'fire', 'ice'],
     resist: ['ground', 'water', 'grass', 'electric'],
+    immune: [],
   },
-  electric: { weak: ['ground'], resist: ['flying', 'steel', 'electric'] },
+  electric: {
+    weak: ['ground'],
+    resist: ['flying', 'steel'],
+    immune: [],
+  },
   psychic: {
     weak: ['bug', 'ghost', 'dark'],
     resist: ['fighting', 'psychic'],
+    immune: [],
   },
-  ice: { weak: ['fighting', 'rock', 'steel', 'fire'], resist: ['ice'] },
+  ice: {
+    weak: ['fighting', 'rock', 'steel', 'fire'],
+    resist: ['ice'],
+    immune: [],
+  },
   dragon: {
     weak: ['ice', 'dragon', 'fairy'],
     resist: ['fire', 'water', 'grass', 'electric'],
+    immune: [],
   },
-  dark: { weak: ['fighting', 'bug', 'fairy'], resist: ['ghost', 'dark'] },
-  fairy: { weak: ['poison', 'steel'], resist: ['fighting', 'bug', 'dragon'] },
-};
-
-export const effectiveness = {
-  superEffective: 2,
-  veryEffective: 1,
-  normalEffective: 0.5,
-  notVeryEffective: 0.25,
-  noEffect: 0,
+  dark: {
+    weak: ['fighting', 'bug', 'fairy'],
+    resist: ['ghost', 'dark'],
+    immune: [],
+  },
+  fairy: {
+    weak: ['poison', 'steel'],
+    resist: ['fighting', 'bug', 'dark'],
+    immune: [],
+  },
 };
 
 export const colors = {
@@ -85,12 +110,43 @@ export const colors = {
   noEffect: '#00ff00',
 };
 
+export const effectiveness = {
+  superEffective: 2,
+  veryEffective: 1,
+  normalEffective: 0.5,
+  notVeryEffective: 0.25,
+  noEffect: 0,
+};
+
 export const compareTypes = (type1, type2) => {
   if (type1 === type2) return effectiveness.normalEffective;
-  if (types[type1].weak.includes(type2)) return effectiveness.superEffective;
-  if (types[type1].resist.includes(type2))
+
+  const type1Effectiveness = calculateEffectiveness(type1, type2);
+  const type2Effectiveness = calculateEffectiveness(type2, type1);
+
+  if (type1Effectiveness === effectiveness.superEffective || type2Effectiveness === effectiveness.superEffective) {
+    return effectiveness.superEffective;
+  } else if (type1Effectiveness === effectiveness.notVeryEffective || type2Effectiveness === effectiveness.notVeryEffective) {
     return effectiveness.notVeryEffective;
-  return effectiveness.veryEffective;
+  } else if (type1Effectiveness === effectiveness.ineffective || type2Effectiveness === effectiveness.ineffective) {
+    return effectiveness.ineffective;
+  } else {
+    return effectiveness.normalEffective;
+  }
+};
+
+export const calculateEffectiveness = (attackingType, defendingType) => {
+  if (types[attackingType].weak.includes(defendingType)) {
+    return effectiveness.superEffective;
+  } else if (types[attackingType].resist.includes(defendingType)) {
+    return effectiveness.notVeryEffective;
+  } else if (types[defendingType].weak.includes(attackingType)) {
+    return effectiveness.veryEffective;
+  } else if (types[defendingType].resist.includes(attackingType)) {
+    return effectiveness.ineffective;
+  } else {
+    return effectiveness.normalEffective;
+  }
 };
 
 export const getEffectivenessText = (effectivenessValue) => {
