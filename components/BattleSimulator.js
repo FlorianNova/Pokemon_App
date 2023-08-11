@@ -14,6 +14,7 @@ const PopupWrapper = styled.div`
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
+  font-weight: bold;
 `;
 
 const PopupContent = styled.div`
@@ -25,6 +26,7 @@ const PopupContent = styled.div`
   max-width: 90%;
   max-height: 90%;
   overflow-y: auto;
+  font-weight: bold;
 `;
 
 const CloseButton = styled.button`

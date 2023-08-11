@@ -73,13 +73,13 @@ const ScrollButtons = styled.button`
 `;
 
 const ScrollToTopButton = styled(ScrollButtons)`
-  bottom: 100px;
+  bottom: 50px;
   left: 20px;
   z-index: 10;
 `;
 
 const ScrollToBottomButton = styled(ScrollButtons)`
-  bottom: 20px;
+  bottom: 30px;
   right: 20px;
   z-index: 10;
   display: ${(props) =>
@@ -107,7 +107,7 @@ const CompareButton = styled.button`
   border-radius: 10px;
   cursor: pointer;
   font-size: 15px;
-  width: 50%;
+  width: 40%;
 
   transform: translateY(-30%);
 

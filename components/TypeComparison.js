@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { compareTypes, getEffectivenessText } from './typeUtils';
+import { colors, compareTypes, types, getEffectivenessText } from './typeUtils'; 
 
 const PopupWrapper = styled.div`
   position: fixed;
@@ -41,7 +41,7 @@ const TypeComparison = ({ attackerType, defenderType, onClose }) => {
     <PopupWrapper>
       <PopupContent>
         <CloseButton onClick={onClose}>X</CloseButton>
-        <h3>{attackerType} effectiveness against {defenderType}:</h3>
+        <h3>{attackerType} - VS - {defenderType}:</h3>
         <p>
           {getEffectivenessText(
             compareTypes(attackerType, defenderType),

@@ -398,7 +398,7 @@ export const getEffectivenessText = (
   defendingType
 ) => {
   if (effectivenessValue === effectiveness.superEffective) {
-    return `${attackingType} is super effective against ${defendingType}!`;
+    return `${attackingType} is very effective against ${defendingType}!`;
   } else if (effectivenessValue === effectiveness.veryEffective) {
     return `${attackingType} is very effective against ${defendingType}.`;
   } else if (effectivenessValue === effectiveness.normalEffective) {
