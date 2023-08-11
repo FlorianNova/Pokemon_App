@@ -59,8 +59,8 @@ const ScrollButtons = styled.button`
   color: black;
   border: solid 5px black;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   display: ${(props) => (props.visible ? 'block' : 'none')};
   cursor: pointer;
   font-size: 30px;
@@ -73,7 +73,7 @@ const ScrollButtons = styled.button`
 `;
 
 const ScrollToTopButton = styled(ScrollButtons)`
-  bottom: 20px;
+  bottom: 100px;
   left: 20px;
   z-index: 10;
 `;
@@ -92,22 +92,32 @@ const ScrollToBottomButton = styled(ScrollButtons)`
 `;
 
 const CompareButton = styled.button`
+  display: flex;
+  justify-content: space-around;
   position: fixed;
-  top: 20px;
-  left: 20px;
+  bottom: 20px; 
+  left: 0;
+  right: 0;
+  margin: auto;
   z-index: 10;
-  background-color: #007bff;
+  background-color: red;
   color: white;
   border: none;
   padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
+  width: 50%;
+
+  transform: translateY(-30%);
 
   &:hover {
-    background-color: #0056b3;
+    background-color: black;
   }
 `;
+
+
+
 
 export default function PokemonList() {
   const [pokemonData, setPokemonData] = useState([]);

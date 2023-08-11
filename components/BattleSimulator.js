@@ -129,8 +129,8 @@ export default function BattleSimulator() {
         <PopupWrapper>
           <PopupContent>
             <CloseButton onClick={() => setShowComparisonPopup(false)}>X</CloseButton>
-            <h2>Select Attacking and Defending Pokémon Types</h2>
-            <p>Please select the Attacking Type and then the Defending Type.</p>
+            <h2>Select two Types:</h2>
+            <p>Please select the Attacking Type first and then the Defending Type.</p>
             <div>
               <TypeButton type="normal" onClick={() => handleTypeClick('normal')}>Normal</TypeButton>
               <TypeButton type="fire" onClick={() => handleTypeClick('fire')}>Fire</TypeButton>
