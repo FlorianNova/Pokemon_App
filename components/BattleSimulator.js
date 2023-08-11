@@ -64,7 +64,7 @@ export default function BattleSimulator() {
 
   return (
     <div>
-      <button onClick={handleCompareClick}>Compare Pokemon</button>
+      <button onClick={handleCompareClick}>Compare Types</button>
       {showTypePopup && (
         <PopupWrapper>
           <PopupContent>

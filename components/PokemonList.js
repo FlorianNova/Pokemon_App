@@ -217,7 +217,7 @@ export default function PokemonList() {
         &#8681;
       </ScrollToBottomButton>
       <CompareButton onClick={handleCompareClick}>
-        Compare Pokémon
+        Compare Types
       </CompareButton>
       <SearchBar
         type="text"
