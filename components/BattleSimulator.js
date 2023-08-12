@@ -27,6 +27,7 @@ const PopupContent = styled.div`
   max-height: 90%;
   overflow-y: auto;
   font-weight: bold;
+  
 `;
 
 const CloseButton = styled.button`
@@ -42,6 +43,14 @@ const CloseButton = styled.button`
 
 
 const TypeButton = styled.button`
+  &:hover {
+    transform: scale(1.1);
+    transition: transform 0.1s ease;
+    box-shadow: 5px 5px 5px 1px rgba(0, 0, 0, 0.1);
+  }
+  &:focus {
+    outline: 2px solid black;
+  }
   margin: 5px;
   padding: 10px;
   border: none;
@@ -52,6 +61,7 @@ const TypeButton = styled.button`
     return `background-color: ${typeToColor[props.type]}`;
   }}
 `;
+
 
 export default function BattleSimulator({handleModal}) {
   const [attackerType, setAttackerType] = useState(null);
@@ -87,7 +97,7 @@ export default function BattleSimulator({handleModal}) {
         <PopupWrapper>
           <PopupContent>
             <CloseButton onClick={() => handleModal()}>X</CloseButton>
-            <h2>Select two Types:</h2>
+            <h2>Type effectiveness:</h2>
             <p>Please select the Attacking Type first and then the Defending Type.</p>
             <div>
               <TypeButton type="normal" onClick={() => handleTypeClick('normal')}>Normal</TypeButton>

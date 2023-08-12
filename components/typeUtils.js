@@ -371,53 +371,38 @@ export const effectiveness = {
   noEffect: 0,
 };
 
-export const compareTypes = (type1, type2) => { 
-  if (type1 === type2) return effectiveness.normalEffective;
-
-  const type1Effectiveness = calculateEffectiveness(type1, type2);
-  const type2Effectiveness = calculateEffectiveness(type2, type1);
-
-  console.log({att: type1Effectiveness})
-  console.log({dev: type2Effectiveness})
-
-  if (
-    type1Effectiveness === effectiveness.superEffective ||
-    type2Effectiveness === effectiveness.superEffective
-  ) {
-    return effectiveness.superEffective;
-  } else if (
-    type1Effectiveness === effectiveness.notVeryEffective ||
-    type2Effectiveness === effectiveness.notVeryEffective
-  ) {
-    return effectiveness.notVeryEffective;
-  } else if (
-    type1Effectiveness === effectiveness.ineffective ||
-    type2Effectiveness === effectiveness.ineffective
-  ) {
-    return effectiveness.ineffective;
-  } else {
-    return effectiveness.normalEffective;
-  }
-};
-
-export const calculateEffectiveness = (attackingType, defendingType) => {
-  console.log({att: attackingType})
-  console.log({def: defendingType})
+export const calculateEffectiveness = (defendingType, attackingType) => {
   if (types[attackingType].weak.includes(defendingType)) {
     return effectiveness.superEffective;
   } else if (types[attackingType].resist.includes(defendingType)) {
     return effectiveness.notVeryEffective;
   } else if (types[defendingType].weak.includes(attackingType)) {
-    console.log({att: attackingType, def: defendingType})
     return effectiveness.veryEffective;
   } else if (types[defendingType].resist.includes(attackingType)) {
     return effectiveness.notVeryEffective;
+  } else if (types[defendingType].immune.includes(attackingType)) {
+    return effectiveness.noEffect;
   } else if (types[defendingType].normalEffective.includes(attackingType)) {
     return effectiveness.normalEffective;
   } else {
     return effectiveness.normalEffective; // Fallback to normalEffective for cases with no clear match
   }
 };
+
+export const compareTypes = (defendingType, attackingType) => { 
+  const type1Effectiveness = calculateEffectiveness(defendingType, attackingType);
+  
+  if (type1Effectiveness === effectiveness.superEffective) {
+    return effectiveness.superEffective;
+  } else if (type1Effectiveness === effectiveness.notVeryEffective) {
+    return effectiveness.notVeryEffective;
+  } else if (type1Effectiveness === effectiveness.noEffect) {
+    return effectiveness.noEffect;
+  } else {
+    return effectiveness.normalEffective;
+  }
+};
+
 
 export const getEffectivenessText = (
   effectivenessValue,
