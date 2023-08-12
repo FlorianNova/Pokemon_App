@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { colors, compareTypes, types } from './typeUtils';
+import { colors, compareTypes, types, typeToColor } from './typeUtils';
 import TypeComparison from './TypeComparison';
 
 const PopupWrapper = styled.div`
@@ -39,10 +39,7 @@ const CloseButton = styled.button`
   color: red;
 `;
 
-const typeToColor = {};
-Object.keys(types).forEach((type) => {
-  typeToColor[type] = colors[type];
-});
+
 
 const TypeButton = styled.button`
   margin: 5px;
@@ -52,50 +49,11 @@ const TypeButton = styled.button`
   color: white;
   cursor: pointer;
   ${(props) => {
-    switch (props.type) {
-      case 'normal':
-        return `background-color: #A8A77A;`;
-      case 'fire':
-        return `background-color: #EE8130;`;
-      case 'water':
-        return `background-color: #6390F0;`;
-      case 'electric':
-        return `background-color: #F7D02C;`;
-      case 'grass':
-        return `background-color: #7AC74C;`;
-      case 'ice':
-        return `background-color: #96D9D6;`;
-      case 'fighting':
-        return `background-color: #C22E28;`;
-      case 'poison':
-        return `background-color: #A33EA1;`;
-      case 'ground':
-        return `background-color: #E2BF65;`;
-      case 'flying':
-        return `background-color: #A98FF3;`;
-      case 'psychic':
-        return `background-color: #F95587;`;
-      case 'bug':
-        return `background-color: #A6B91A;`;
-      case 'rock':
-        return `background-color: #B6A136;`;
-      case 'ghost':
-        return `background-color: #735797;`;
-      case 'dragon':
-        return `background-color: #6F35FC;`;
-      case 'dark':
-        return `background-color: #705746;`;
-      case 'steel':
-        return `background-color: #B7B7CE;`;
-      case 'fairy':
-        return `background-color: #D685AD;`;
-      default:
-        return `background-color: transparent;`;
-    }
+    return `background-color: ${typeToColor[props.type]}`;
   }}
 `;
 
-export default function BattleSimulator() {
+export default function BattleSimulator({handleModal}) {
   const [attackerType, setAttackerType] = useState(null);
   const [defenderType, setDefenderType] = useState(null);
   const [showComparisonPopup, setShowComparisonPopup] = useState(false);
@@ -103,13 +61,11 @@ export default function BattleSimulator() {
   const handleTypeClick = (type) => {
     if (!attackerType) {
       setAttackerType(type);
-    } else if (!defenderType) {
-      setDefenderType(type);
+      return
     }
-
-    if (attackerType && defenderType) {
-      setShowComparisonPopup(true);
-    }
+   
+    setDefenderType(type);
+    setShowComparisonPopup(true);
   };
 
   const handleCloseComparisonPopup = () => {
@@ -130,7 +86,7 @@ export default function BattleSimulator() {
       {!showComparisonPopup && (
         <PopupWrapper>
           <PopupContent>
-            <CloseButton onClick={() => setShowComparisonPopup(false)}>X</CloseButton>
+            <CloseButton onClick={() => handleModal()}>X</CloseButton>
             <h2>Select two Types:</h2>
             <p>Please select the Attacking Type first and then the Defending Type.</p>
             <div>

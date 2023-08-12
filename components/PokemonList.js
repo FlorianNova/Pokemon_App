@@ -197,7 +197,7 @@ export default function PokemonList() {
   };
 
   const handleCompareClick = () => {
-    setIsComparing(true);
+    setIsComparing(!isComparing);
   };
 
   const handlePokemonCardClick = (pokemonName) => {
@@ -254,6 +254,7 @@ export default function PokemonList() {
         <PokemonTypeCompareDisplay
           pokemon1={selectedPokemon.pokemon1}
           pokemon2={selectedPokemon.pokemon2}
+          handleModal={handleCompareClick}
         />
       )}
     </div>

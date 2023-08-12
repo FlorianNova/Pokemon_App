@@ -334,6 +334,27 @@ export const types = {
   },
 };
 
+export const typeToColor = {
+  normal: '#A8A77A',
+  fire: '#EE8130',
+  water: '#6390F0',
+  electric: '#F7D02C',
+  grass: '#7AC74C',
+  ice: '#96D9D6',
+  fighting: '#C22E28',
+  poison: '#A33EA1',
+  ground: '#E2BF65',
+  flying: '#A98FF3',
+  psychic: '#F95587',
+  bug: '#A6B91A',
+  rock: '#B6A136',
+  ghost: '#735797',
+  dragon: '#6F35FC',
+  dark: '#705746',
+  steel: '#B7B7CE',
+  fairy: '#D685AD',
+};
+
 export const colors = {
   superEffective: '#ff0000',
   veryEffective: '#ff6600',
@@ -350,11 +371,14 @@ export const effectiveness = {
   noEffect: 0,
 };
 
-export const compareTypes = (type1, type2) => {
+export const compareTypes = (type1, type2) => { 
   if (type1 === type2) return effectiveness.normalEffective;
 
   const type1Effectiveness = calculateEffectiveness(type1, type2);
   const type2Effectiveness = calculateEffectiveness(type2, type1);
+
+  console.log({att: type1Effectiveness})
+  console.log({dev: type2Effectiveness})
 
   if (
     type1Effectiveness === effectiveness.superEffective ||
@@ -377,11 +401,14 @@ export const compareTypes = (type1, type2) => {
 };
 
 export const calculateEffectiveness = (attackingType, defendingType) => {
+  console.log({att: attackingType})
+  console.log({def: defendingType})
   if (types[attackingType].weak.includes(defendingType)) {
     return effectiveness.superEffective;
   } else if (types[attackingType].resist.includes(defendingType)) {
     return effectiveness.notVeryEffective;
   } else if (types[defendingType].weak.includes(attackingType)) {
+    console.log({att: attackingType, def: defendingType})
     return effectiveness.veryEffective;
   } else if (types[defendingType].resist.includes(attackingType)) {
     return effectiveness.notVeryEffective;
