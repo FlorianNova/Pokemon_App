@@ -57,30 +57,29 @@ const ScrollButtons = styled.button`
   position: fixed;
   background-color: transparent;
   color: black;
-  border: solid 5px black;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  border: none;
+  border-radius: 20px;
   display: ${(props) => (props.visible ? 'block' : 'none')};
   cursor: pointer;
   font-size: 30px;
 
   &:hover {
     background-color: transparent;
-    transform: scale(1.5);
-    transition: transform 0.3s ease;
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+    border: solid;
   }
 `;
 
 const ScrollToTopButton = styled(ScrollButtons)`
-  bottom: 50px;
-  left: 20px;
+  bottom: 30px;
+  right: 20px;
   z-index: 10;
 `;
 
 const ScrollToBottomButton = styled(ScrollButtons)`
   bottom: 30px;
-  right: 20px;
+  left: 20px;
   z-index: 10;
   display: ${(props) =>
     props.visible &&
@@ -100,7 +99,7 @@ const CompareButton = styled.button`
   right: 0;
   margin: auto;
   z-index: 10;
-  background-color: red;
+  background-color: #dd0000;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -112,7 +111,11 @@ const CompareButton = styled.button`
   transform: translateY(-30%);
 
   &:hover {
-    background-color: black;
+    background-color: red;
+  }
+  &:focus {
+    transform: scale(0.95);
+    transform: scale(1.0);
   }
 `;
 
@@ -227,7 +230,7 @@ export default function PokemonList() {
         &#8681;
       </ScrollToBottomButton>
       <CompareButton onClick={handleCompareClick}>
-        Compare Types
+        Fight!
       </CompareButton>
       <SearchBar
         type="text"

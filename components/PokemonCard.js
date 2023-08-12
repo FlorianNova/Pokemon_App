@@ -47,6 +47,7 @@ const PokemonImage = styled.div`
   padding-top: 100%;
   position: relative;
   border-radius: 80%;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const PokemonNumber = styled.span`

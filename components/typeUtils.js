@@ -123,13 +123,13 @@ export const typeToColor = {
   fairy: '#D685AD',
 };
 
-export const colors = {
-  superEffective: '#ff0000',
-  veryEffective: '#ff6600',
-  normalEffective: '#ffff00',
-  notVeryEffective: '#99cc00',
-  noEffect: '#00ff00',
-};
+// export const colors = {
+//   superEffective: '#ff0000',
+//   veryEffective: '#ff6600',
+//   normalEffective: '#ffff00',
+//   notVeryEffective: '#99cc00',
+//   noEffect: '#00ff00',
+// };
 
 export const effectiveness = {
   superEffective: 2,
@@ -153,7 +153,7 @@ export const calculateEffectiveness = (defendingType, attackingType) => {
   } else if (types[defendingType].normalEffective.includes(attackingType)) {
     return effectiveness.normalEffective;
   } else {
-    return effectiveness.normalEffective; // Fallback to normalEffective for cases with no clear match
+    return effectiveness.normalEffective;
   }
 };
 
@@ -181,8 +181,8 @@ export const getEffectivenessText = (
   } else if (effectivenessValue === effectiveness.notVeryEffective) {
     return `${attackingType} is not very effective against ${defendingType}...`;
   } else if (effectivenessValue === effectiveness.noEffect) {
-    return `${attackingType} has no effect against ${defendingType}.`;
-  } else {
-    return 'Unknown';
+    return `${attackingType} has no effect against ${defendingType}!`;
+  
+  
   }
 };

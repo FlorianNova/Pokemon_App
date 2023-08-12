@@ -32,12 +32,26 @@ const PopupContent = styled.div`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: 10px;
-  right: 10px;
+  font-size: 20px;
+  top: 7px;
+  right: 7px;
   background: none;
-  border: none;
+  border: 3px solid black;
+  border-radius: 10px;
   cursor: pointer;
-  color: red;
+  color: black;
+
+  &:hover {
+    transition: transform 0.1s ease;
+    box-shadow: 2px 3px 4px 5px rgba(5, 4, 2, 0.1);
+    border: 3px solid red;
+    color: red;
+  }
+  &:focus {
+    transform: scale(0.8);
+    transform: scale(1.0);
+    transition: transform 0.1s ease;
+  }
 `;
 
 
@@ -45,7 +59,7 @@ const CloseButton = styled.button`
 const TypeButton = styled.button`
   &:hover {
     transform: scale(1.1);
-    transition: transform 0.1s ease;
+    transition: transform 0.0.5s ease;
     box-shadow: 5px 5px 5px 1px rgba(0, 0, 0, 0.1);
   }
   &:focus {
@@ -97,8 +111,8 @@ export default function BattleSimulator({handleModal}) {
         <PopupWrapper>
           <PopupContent>
             <CloseButton onClick={() => handleModal()}>X</CloseButton>
-            <h2>Type effectiveness:</h2>
-            <p>Please select the Attacking Type first and then the Defending Type.</p>
+            <h2>Poké Types:</h2>
+            <p>Select two types to compete!</p>
             <div>
               <TypeButton type="normal" onClick={() => handleTypeClick('normal')}>Normal</TypeButton>
               <TypeButton type="fire" onClick={() => handleTypeClick('fire')}>Fire</TypeButton>
