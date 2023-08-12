@@ -66,7 +66,7 @@ export default function Home() {
       </Head>
 
       <main>
-        <Title>Pokémon Card List</Title>
+        <Title> Poké Compare</Title>
         <GridWrapper>
           {/* Pass the function to select the Pokemon. */}
           <PokemonList onPokemonSelect={handlePokemonSelection} />

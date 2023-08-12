@@ -3,147 +3,41 @@ export const types = {
     weak: ['fighting'],
     resist: [],
     immune: ['ghost'],
-    normalEffective: [
-      'normal',
-      'flying',
-      'poison',
-      'ground',
-      'rock',
-      'bug',
-      'steel',
-      'fire',
-      'water',
-      'grass',
-      'electric',
-      'psychic',
-      'ice',
-      'dragon',
-      'dark',
-      'fairy',
-    ],
   },
   fighting: {
     weak: ['flying', 'psychic', 'fairy'],
     resist: ['bug', 'rock', 'dark'],
     immune: [],
-    normalEffective: [
-      'normal',
-      'fighting',
-      'ground',
-      'rock',
-      'steel',
-      'fire',
-      'water',
-      'grass',
-      'electric',
-      'ice',
-      'dragon',
-      'fairy',
-    ],
   },
   flying: {
     weak: ['rock', 'electric', 'ice'],
     resist: ['fighting', 'bug', 'grass'],
-    immune: [],
-    normalEffective: [
-      'normal',
-      'flying',
-      'poison',
-      'steel',
-      'fire',
-      'water',
-      'grass',
-      'electric',
-      'psychic',
-      'ice',
-      'dragon',
-      'dark',
-      'fairy',
-    ],
+    immune: ['ground'],
   },
   poison: {
     weak: ['ground', 'psychic'],
     resist: ['fighting', 'poison', 'bug', 'grass', 'fairy'],
     immune: [],
-    normalEffective: [
-      'normal',
-      'flying',
-      'rock',
-      'steel',
-      'fire',
-      'water',
-      'electric',
-      'psychic',
-      'dragon',
-    ],
   },
   ground: {
     weak: ['water', 'grass', 'ice'],
     resist: ['poison', 'rock', 'electric'],
     immune: ['electric'],
-    normalEffective: [
-      'normal',
-      'fighting',
-      'bug',
-      'steel',
-      'fire',
-      'water',
-      'grass',
-      'psychic',
-      'ice',
-      'dragon',
-      'dark',
-      'fairy',
-    ],
   },
   rock: {
     weak: ['fighting', 'ground', 'steel', 'water', 'grass'],
     resist: ['normal', 'flying', 'poison', 'fire'],
     immune: [],
-    normalEffective: [
-      'rock',
-      'bug',
-      'electric',
-      'psychic',
-      'ice',
-      'dragon',
-      'dark',
-      'fairy',
-    ],
   },
   bug: {
     weak: ['flying', 'rock', 'fire'],
     resist: ['fighting', 'ground', 'grass'],
     immune: [],
-    normalEffective: [
-      'normal',
-      'poison',
-      'bug',
-      'steel',
-      'water',
-      'electric',
-      'psychic',
-      'ice',
-      'dragon',
-      'dark',
-      'fairy',
-    ],
   },
   ghost: {
     weak: ['ghost', 'dark'],
     resist: ['poison', 'bug'],
     immune: ['normal', 'fighting'],
-    normalEffective: [
-      'flying',
-      'rock',
-      'fire',
-      'water',
-      'grass',
-      'electric',
-      'ice',
-      'dragon',
-      'fairy',
-    ],
   },
   steel: {
     weak: ['fighting', 'ground', 'fire'],
@@ -160,177 +54,51 @@ export const types = {
       'fairy',
     ],
     immune: ['poison'],
-    normalEffective: ['poison', 'water', 'electric', 'dark'],
   },
   fire: {
     weak: ['ground', 'rock', 'water'],
     resist: ['bug', 'steel', 'fire', 'grass', 'ice'],
     immune: [],
-    normalEffective: [
-      'normal',
-      'flying',
-      'poison',
-      'fighting',
-      'ground',
-      'rock',
-      'ghost',
-      'water',
-      'electric',
-      'psychic',
-      'dragon',
-      'dark',
-      'fairy',
-    ],
   },
   water: {
     weak: ['grass', 'electric'],
     resist: ['steel', 'fire', 'water', 'ice'],
     immune: [],
-    normalEffective: [
-      'normal',
-      'flying',
-      'poison',
-      'fighting',
-      'ground',
-      'rock',
-      'bug',
-      'ghost',
-      'psychic',
-      'dragon',
-      'dark',
-      'fairy',
-    ],
   },
   grass: {
     weak: ['flying', 'poison', 'bug', 'fire', 'ice'],
     resist: ['ground', 'water', 'grass', 'electric'],
     immune: [],
-    normalEffective: [
-      'normal',
-      'fighting',
-      'rock',
-      'steel',
-      'psychic',
-      'dragon',
-      'dark',
-    ],
   },
   electric: {
     weak: ['ground'],
     resist: ['flying', 'steel'],
     immune: [],
-    normalEffective: [
-      'normal',
-      'poison',
-      'rock',
-      'bug',
-      'ghost',
-      'water',
-      'grass',
-      'electric',
-      'psychic',
-      'ice',
-      'dragon',
-      'dark',
-      'fairy',
-    ],
   },
   psychic: {
     weak: ['bug', 'ghost', 'dark'],
     resist: ['fighting', 'psychic'],
     immune: [],
-    normalEffective: [
-      'normal',
-      'flying',
-      'poison',
-      'ground',
-      'rock',
-      'bug',
-      'steel',
-      'fire',
-      'water',
-      'grass',
-      'electric',
-      'psychic',
-      'ice',
-      'dragon',
-      'fairy',
-    ],
   },
   ice: {
     weak: ['fighting', 'rock', 'steel', 'fire'],
     resist: ['ice'],
     immune: [],
-    normalEffective: [
-      'normal',
-      'flying',
-      'poison',
-      'ground',
-      'bug',
-      'ghost',
-      'water',
-      'grass',
-      'electric',
-      'psychic',
-      'dark',
-      'fairy',
-    ],
   },
   dragon: {
     weak: ['ice', 'dragon', 'fairy'],
     resist: ['fire', 'water', 'grass', 'electric'],
     immune: [],
-    normalEffective: [
-      'normal',
-      'poison',
-      'fighting',
-      'ground',
-      'rock',
-      'bug',
-      'ghost',
-      'steel',
-      'psychic',
-      'dark',
-    ],
   },
   dark: {
     weak: ['fighting', 'bug', 'fairy'],
     resist: ['ghost', 'dark'],
     immune: [],
-    normalEffective: [
-      'normal',
-      'flying',
-      'poison',
-      'ground',
-      'rock',
-      'steel',
-      'fire',
-      'water',
-      'grass',
-      'electric',
-      'psychic',
-      'ice',
-      'dragon',
-      'fairy',
-    ],
   },
   fairy: {
     weak: ['poison', 'steel'],
     resist: ['fighting', 'bug', 'dark'],
-    immune: [],
-    normalEffective: [
-      'normal',
-      'flying',
-      'ground',
-      'rock',
-      'fire',
-      'water',
-      'grass',
-      'electric',
-      'psychic',
-      'ice',
-      'dragon',
-    ],
+    immune: ['dragon'],
   },
 };
 
@@ -389,30 +157,25 @@ export const calculateEffectiveness = (defendingType, attackingType) => {
   }
 };
 
-export const compareTypes = (defendingType, attackingType) => { 
-  const type1Effectiveness = calculateEffectiveness(defendingType, attackingType);
-  
-  if (type1Effectiveness === effectiveness.superEffective) {
-    return effectiveness.superEffective;
-  } else if (type1Effectiveness === effectiveness.notVeryEffective) {
-    return effectiveness.notVeryEffective;
-  } else if (type1Effectiveness === effectiveness.noEffect) {
+export const compareTypes = (attackingType, defendingType) => {
+  if (types[defendingType].weak.includes(attackingType)) {
+    return effectiveness.veryEffective;
+  } else if (types[defendingType].immune.includes(attackingType)) {
     return effectiveness.noEffect;
+  } else if (types[defendingType].resist.includes(attackingType)) {
+    return effectiveness.notVeryEffective;
   } else {
     return effectiveness.normalEffective;
   }
 };
-
 
 export const getEffectivenessText = (
   effectivenessValue,
   attackingType,
   defendingType
 ) => {
-  if (effectivenessValue === effectiveness.superEffective) {
+  if (effectivenessValue === effectiveness.veryEffective) {
     return `${attackingType} is very effective against ${defendingType}!`;
-  } else if (effectivenessValue === effectiveness.veryEffective) {
-    return `${attackingType} is very effective against ${defendingType}.`;
   } else if (effectivenessValue === effectiveness.normalEffective) {
     return `${attackingType} is normally effective against ${defendingType}.`;
   } else if (effectivenessValue === effectiveness.notVeryEffective) {
