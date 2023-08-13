@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { colors, compareTypes, types, getEffectivenessText } from './typeUtils'; 
+import {StyledImage} from './PokemonList';
 
 const PopupWrapper = styled.div`
   position: fixed;
@@ -37,16 +38,19 @@ const CloseButton = styled.button`
 `;
 
 const TypeComparison = ({ attackerType, defenderType, onClose }) => {
+  const formattedAttackerType = attackerType.charAt(0).toUpperCase() + attackerType.slice(1);
+  const formattedDefenderType = defenderType.charAt(0).toUpperCase() + defenderType.slice(1);
+
   return (
     <PopupWrapper>
       <PopupContent>
         <CloseButton onClick={onClose}>X</CloseButton>
-        <h3>{attackerType} - VS - {defenderType}:</h3>
+        <h3>{formattedAttackerType} <StyledImage alt='' src='/versus.png'/> {formattedDefenderType}:</h3>
         <p>
           {getEffectivenessText(
             compareTypes(attackerType, defenderType),
-            attackerType,
-            defenderType
+            formattedAttackerType,
+            formattedDefenderType
           )}
         </p>
       </PopupContent>

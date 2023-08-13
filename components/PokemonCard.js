@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { typeToColor } from './typeUtils';
 
 const CardWrapper = styled.div`

@@ -126,8 +126,8 @@ export default function BattleSimulator({ handleModal }) {
         <PopupWrapper>
           <PopupContent>
             <CloseButton onClick={() => handleModal()}>X</CloseButton>
-            <h2>Poké Types:</h2>
-            <p>Select two types to compete!</p>
+            <h2>Poké types</h2>
+            <p>Pick two types to see their effectiveness in a battle</p>
             <div>
               <TypeButton
                 type="normal"
