@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { colors, compareTypes, types, typeToColor } from './typeUtils';
+import { typeToColor } from './typeUtils';
 import TypeComparison from './TypeComparison';
 
 const PopupWrapper = styled.div`
@@ -29,7 +29,7 @@ const PopupContent = styled.div`
   font-weight: bold;
 `;
 
-const CloseButton = styled.button`
+export const CloseButton = styled.button`
   position: absolute;
   font-size: 20px;
   top: 7px;
@@ -51,7 +51,7 @@ const CloseButton = styled.button`
   }
 `;
 
-const CloseComparisonButton = styled.button`
+const EffectivenessTextCloseButton = styled.button`
   position: absolute;
   font-size: 20px;
   top: 7px;

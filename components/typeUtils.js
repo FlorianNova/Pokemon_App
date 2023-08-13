@@ -166,16 +166,41 @@ export const getEffectivenessText = (
   attackingType,
   defendingType
 ) => {
-  const formattedAttackingType = attackingType.charAt(0).toUpperCase() + attackingType.slice(1);
-  const formattedDefendingType = defendingType.charAt(0).toUpperCase() + defendingType.slice(1);
+  const formattedAttackingType =
+    attackingType.charAt(0).toUpperCase() + attackingType.slice(1);
+  const formattedDefendingType =
+    defendingType.charAt(0).toUpperCase() + defendingType.slice(1);
 
   if (effectivenessValue === effectiveness.veryEffective) {
-    return `${formattedAttackingType} moves are very effective against ${formattedDefendingType} Pokémon!`;
+    return (
+      <p>
+        <strong>{formattedAttackingType} moves</strong> are{' '}
+        <strong>very effective</strong> against {formattedDefendingType}{' '}
+        Pokémon!
+      </p>
+    );
   } else if (effectivenessValue === effectiveness.normalEffective) {
-    return `${formattedAttackingType} moves are normal effective against ${formattedDefendingType} Pokémon.`;
+    return (
+      <p>
+        <strong>{formattedAttackingType} moves</strong> are{' '}
+        <strong>normal effective</strong> against {formattedDefendingType}{' '}
+        Pokémon.
+      </p>
+    );
   } else if (effectivenessValue === effectiveness.notVeryEffective) {
-    return `${formattedAttackingType} moves are not very effective against ${formattedDefendingType} Pokémon...`;
+    return (
+      <p>
+        <strong>{formattedAttackingType} moves</strong> are{' '}
+        <strong>not very effective</strong> against {formattedDefendingType}{' '}
+        Pokémon...
+      </p>
+    );
   } else if (effectivenessValue === effectiveness.noEffect) {
-    return `${formattedAttackingType} moves have no effect against ${formattedDefendingType} Pokémon!`;
+    return (
+      <p>
+        <strong>{formattedAttackingType} moves</strong> have{' '}
+        <strong>no effect</strong> against {formattedDefendingType} Pokémon!
+      </p>
+    );
   }
 };

@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colors, compareTypes, types, getEffectivenessText } from './typeUtils'; 
+import { compareTypes, getEffectivenessText } from './typeUtils'; 
 import {StyledImage} from './PokemonList';
+import {CloseButton} from './BattleSimulator';
 
 const PopupWrapper = styled.div`
   position: fixed;
@@ -25,16 +26,6 @@ const PopupContent = styled.div`
   max-width: 90%;
   max-height: 90%;
   overflow-y: auto;
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: red;
 `;
 
 const TypeComparison = ({ attackerType, defenderType, onClose }) => {
