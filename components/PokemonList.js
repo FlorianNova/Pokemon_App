@@ -57,29 +57,29 @@ const ScrollButtons = styled.button`
   position: fixed;
   background-color: transparent;
   color: black;
-  border: none;
   border-radius: 20px;
-  display: ${(props) => (props.visible ? 'block' : 'none')};
+  
   cursor: pointer;
   font-size: 30px;
+  background-color: #fff;
+  border: 2px solid #ddd;
 
   &:hover {
-    background-color: transparent;
     transform: scale(1.1);
-    transition: transform 0.2s ease-in-out;
-    border: solid;
+    transition: transform 0.1s ease;
   }
 `;
 
 const ScrollToTopButton = styled(ScrollButtons)`
   bottom: 30px;
-  right: 20px;
+  left: 20px;
   z-index: 10;
+  display: ${(props) => (props.visible ? 'block' : 'none')};
 `;
 
 const ScrollToBottomButton = styled(ScrollButtons)`
   bottom: 30px;
-  left: 20px;
+  right: 20px;
   z-index: 10;
   display: ${(props) =>
     props.visible &&
@@ -94,32 +94,31 @@ const CompareButton = styled.button`
   display: flex;
   justify-content: space-around;
   position: fixed;
-  bottom: 20px; 
+  bottom: 5px; 
   left: 0;
   right: 0;
   margin: auto;
   z-index: 10;
-  background-color: #dd0000;
+  background-color: transparent;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 10px;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 15px;
-  width: 40%;
+
 
   transform: translateY(-30%);
 
   &:hover {
-    background-color: red;
-  }
-  &:focus {
-    transform: scale(0.95);
-    transform: scale(1.0);
+    box-shadow: 2px 3px 4px 5px rgba(5, 4, 2, 0.1);
+    border-radius: 100%;
   }
 `;
 
-
+const StyledImage = styled.img`
+width: 40px;
+height: 40px;
+`;
 
 
 export default function PokemonList() {
@@ -230,7 +229,7 @@ export default function PokemonList() {
         &#8681;
       </ScrollToBottomButton>
       <CompareButton onClick={handleCompareClick}>
-        Fight!
+      <StyledImage alt='' src='/pokeball_emoji.png' />
       </CompareButton>
       <SearchBar
         type="text"

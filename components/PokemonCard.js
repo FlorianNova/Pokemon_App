@@ -16,8 +16,8 @@ const CardWrapper = styled.div`
   background-color: rgb(243, 243, 243);
   background-image: linear-gradient(to bottom, #fcfcfc, #f5f5f5);
   box-shadow: 1px 5px 5px 1px rgba(0, 0, 0, 0.1);
-  padding: 10%;
-  margin: 1%;
+  padding: 10px;
+  margin: 1px;
   margin-bottom: -10%;
   margin-top: 1%;
 
@@ -140,6 +140,7 @@ export default function PokemonCard({
           layout="fill"
           objectFit="contain"
           priority
+          sizes="(max-width: 300px) 100vw, 50vw"
         />
       </PokemonImage>
       <PokemonNumber>{`#${number}`}</PokemonNumber>
