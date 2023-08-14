@@ -188,7 +188,7 @@ export default function PokemonList() {
       }
     };    
     fetchPokemon();
-  }, []);
+  },);
 
   useEffect(() => {
     const handleScroll = () => {
