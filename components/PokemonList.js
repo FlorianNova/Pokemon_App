@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import fetchPokemonData from '../services/fetchPokemonData';
 import PokemonCard from './PokemonCard';
-import styled, { css } from 'styled-components';
+import PokemonTypeCompareDisplay from './BattleSimulator';
+import styled from 'styled-components';
 import { animateScroll as scroll } from 'react-scroll';
 
 const GridWrapper = styled.div`
@@ -22,12 +23,11 @@ const GridWrapper = styled.div`
 `;
 
 const SearchBar = styled.input`
-  width: 50vw;
+  width: 100%;
   padding: 12px;
-  font-size: 2vw;
-  border: 3px solid #ddd;
+  font-size: 3vw;
+  border: 1px solid #ddd;
   border-radius: 20px;
-  margin-bottom: 16px;
   display: block;
   margin: 0 auto;
   margin-bottom: 7%;
@@ -37,8 +37,13 @@ const SearchBar = styled.input`
   z-index: 1;
   box-shadow: 1px 5px 5px 1px rgba(0, 0, 0, 0.1);
 
+  &:active {
+    transform: scale(0.95);
+    box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 5);
+  }
+
   &:hover {
-    box-shadow: 1px 5px 5px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: -1px -2px -3px 5px rgba(5, 0, 0, 2);
     border: 3px solid lightgrey;
   }
 
@@ -56,31 +61,44 @@ const ScrollButtons = styled.button`
   position: fixed;
   background-color: transparent;
   color: black;
-  border: solid 5px black;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  display: ${(props) => (props.visible ? 'block' : 'none')};
+  border-radius: 20px;
   cursor: pointer;
   font-size: 30px;
+  background-color: #fff;
+  border: 2px solid #ddd;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
 
   &:hover {
-    background-color: transparent;
-    transform: scale(1.5);
-    transition: transform 0.3s ease;
+    transition: transform 0.1s ease;
+    background-color: #efefefef;
+  }
+
+  &:active {
+    transform: scale(0.95);
+    box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 100);
   }
 `;
 
 const ScrollToTopButton = styled(ScrollButtons)`
-  bottom: 20px;
+  bottom: 30px;
   left: 20px;
   z-index: 10;
+  display: ${(props) => (props.visible ? 'block' : 'none')};
+
+  &:hover {
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 2);
+  }
+
+  &:active {
+    box-shadow: inset 0px 2px 2px rgba(0, 0, 0, 100);
+  }
 `;
 
 const ScrollToBottomButton = styled(ScrollButtons)`
-  bottom: 20px;
+  bottom: 30px;
   right: 20px;
   z-index: 10;
+  transform: rotate(180deg);
   display: ${(props) =>
     props.visible &&
     props.scrollPosition > 0 &&
@@ -88,6 +106,62 @@ const ScrollToBottomButton = styled(ScrollButtons)`
       document.documentElement.scrollHeight - window.innerHeight
       ? 'block'
       : 'none'};
+
+  &:hover {
+    transform: rotate(180deg);
+    transition: transform 0.1s ease;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 2);
+
+    &:active {
+      transform: rotate (180deg) scale(0.95);
+      box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+  }
+`;
+
+const CompareButton = styled.button`
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  bottom: 5px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 10;
+  background-color: transparent;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transform: translateY(-30%);
+
+  @keyframes spin {
+    0% {
+      transform: translateY(-30%) rotate(0deg);
+    }
+
+    100% {
+      transform: translateY(-30%) rotate(360deg);
+    }
+  }
+
+  &:active {
+    transform: scale(0.9) translateY(-30%);
+    box-shadow: inset 2px 0px 0px 5px rgba(0, 0, 0, 100);
+    animation: spin 1s;
+  }
+
+  &:hover {
+    background-color: red;
+    box-shadow: -1px -2px -3px rgba(5, 0, 0, 2);
+    border-radius: 100%;
+  }
+`;
+
+export const StyledImage = styled.img`
+  width: 40px;
+  height: 40px;
 `;
 
 export default function PokemonList() {
@@ -96,24 +170,32 @@ export default function PokemonList() {
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [isComparing, setIsComparing] = useState(false);
+  const [selectedPokemon, setSelectedPokemon] = useState({
+    pokemon1: '',
+    pokemon2: '',
+  });
 
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
-        const data = await fetchPokemonData();
-        setPokemonData(data);
+        if (pokemonData.length === 0) {
+          const data = await fetchPokemonData();
+          setPokemonData(data);
+        }
       } catch (error) {
         console.error('Error fetching Pokemon data:', error);
       }
-    };
+    };    
     fetchPokemon();
-  }, []);
+  },);
 
+  
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
 
-      if (scrollY > 300) {
+      if (scrollY > 100) {
         setShowScrollToTop(true);
       } else {
         setShowScrollToTop(false);
@@ -133,7 +215,7 @@ export default function PokemonList() {
       const scrollY = window.scrollY;
       const fullHeight = document.documentElement.scrollHeight;
 
-      if (fullHeight - scrollY - window.innerHeight > 300) {
+      if (fullHeight - scrollY - window.innerHeight > 100) {
         setShowScrollToBottom(true);
       } else {
         setShowScrollToBottom(false);
@@ -162,6 +244,24 @@ export default function PokemonList() {
     scroll.scrollToBottom();
   };
 
+  const handleCompareClick = () => {
+    setIsComparing(!isComparing);
+  };
+
+  const handlePokemonCardClick = (pokemonName) => {
+    if (isComparing) {
+      setSelectedPokemon((prevSelected) => {
+        if (!prevSelected.pokemon1) {
+          return { ...prevSelected, pokemon1: pokemonName };
+        } else if (!prevSelected.pokemon2) {
+          return { ...prevSelected, pokemon2: pokemonName };
+        } else {
+          return prevSelected;
+        }
+      });
+    }
+  };
+
   return (
     <div>
       <ScrollToTopButton visible={showScrollToTop} onClick={handleScrollToTop}>
@@ -172,11 +272,14 @@ export default function PokemonList() {
         scrollPosition={scrollPosition}
         onClick={handleScrollToBottom}
       >
-        &#8681;
+        &#8679;
       </ScrollToBottomButton>
+      <CompareButton onClick={handleCompareClick}>
+        <StyledImage alt="" src="/pokeball_emoji.png" />
+      </CompareButton>
       <SearchBar
         type="text"
-        placeholder="Search for Pokémon..."
+        placeholder="Search for Pokémon... "
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
@@ -187,10 +290,21 @@ export default function PokemonList() {
             name={pokemon.name}
             number={pokemon.id}
             imageUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
-            handleToggleSelectedPokemon={() => {}} // Replace with your function to handle selecting/deselecting Pokemon
+            onClick={() => handlePokemonCardClick(pokemon.name)}
+            selected={
+              selectedPokemon.pokemon1 === pokemon.name ||
+              selectedPokemon.pokemon2 === pokemon.name
+            }
           />
         ))}
       </GridWrapper>
+      {isComparing && (
+        <PokemonTypeCompareDisplay
+          pokemon1={selectedPokemon.pokemon1}
+          pokemon2={selectedPokemon.pokemon2}
+          handleModal={handleCompareClick}
+        />
+      )}
     </div>
   );
 }

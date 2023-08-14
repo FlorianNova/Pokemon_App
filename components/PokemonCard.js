@@ -1,27 +1,7 @@
-import { useState, useEffect } from 'react';
-import styled, { css } from 'styled-components';
-import Image from 'next/image';
-
-const typeToColor = {
-  normal: '#A8A77A',
-  fire: '#EE8130',
-  water: '#6390F0',
-  electric: '#F7D02C',
-  grass: '#7AC74C',
-  ice: '#96D9D6',
-  fighting: '#C22E28',
-  poison: '#A33EA1',
-  ground: '#E2BF65',
-  flying: '#A98FF3',
-  psychic: '#F95587',
-  bug: '#A6B91A',
-  rock: '#B6A136',
-  ghost: '#735797',
-  dragon: '#6F35FC',
-  dark: '#705746',
-  steel: '#B7B7CE',
-  fairy: '#D685AD',
-};
+import { useState, useEffect, } from 'react';
+import styled, { css, keyframes } from 'styled-components';
+import Image from "next/legacy/image";
+import { typeToColor } from './typeUtils';
 
 const CardWrapper = styled.div`
   width: 100%;
@@ -36,8 +16,8 @@ const CardWrapper = styled.div`
   background-color: rgb(243, 243, 243);
   background-image: linear-gradient(to bottom, #fcfcfc, #f5f5f5);
   box-shadow: 1px 5px 5px 1px rgba(0, 0, 0, 0.1);
-  padding: 10%;
-  margin: 1%;
+  padding: 10px;
+  margin: 1px;
   margin-bottom: -10%;
   margin-top: 1%;
 
@@ -50,14 +30,32 @@ const CardWrapper = styled.div`
       transition: transform 0.3s ease;
     `}
 
+
   &:hover {
     ${(props) =>
       !props.selected &&
       css`
-        box-shadow: 1px 10px 10px 1px rgba(0, 0, 0, 0.1);
+        box-shadow: -1px -2px 5px 1px rgba(0, 0, 0, 0.2);
         transform: scale(1.05);
         transition: transform 0.2s ease-in;
+        cursor: pointer;
       `}
+  }
+
+  &:active {
+    box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.3);
+  }
+`;
+
+const pulseAnimation = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
   }
 `;
 
@@ -66,7 +64,9 @@ const PokemonImage = styled.div`
   padding-top: 100%;
   position: relative;
   border-radius: 80%;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 `;
+
 
 const PokemonNumber = styled.span`
   font-size: min(3vw, 20px);
@@ -96,20 +96,44 @@ const PokemonType = styled.span`
   margin: 4px;
 `;
 
+const PokemonDetails = styled.div`
+  padding: 1px;
+  text-align: left;
+  font-size: min(4vw, 20px);
+  border: 1px solid #ddd;
+  border: none;
+  margin-top: 1px;
+`;
+
+const PokemonDetailItem = styled.div`
+  margin-top: 1px;
+  padding: 1px;
+`;
+
+const PokemonStats = styled.div`
+  margin-top: 2px;
+`;
+
+const PokemonStat = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1px;
+  padding: 1px;
+`;
+
 export default function PokemonCard({
   name,
   number,
   imageUrl,
-  handleToggleSelectedPokemon,
 }) {
-  const [selected, setSelected] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [pokemonDetails, setPokemonDetails] = useState(null);
 
   useEffect(() => {
     const fetchPokemonDetails = async () => {
       try {
         const response = await fetch(
-          `https://pokeapi.co/api/v2/pokemon/${number}`
+          `https://pokeapi.co/api/v2/pokemon/${name}`
         );
         const data = await response.json();
         setPokemonDetails(data);
@@ -119,47 +143,14 @@ export default function PokemonCard({
     };
 
     fetchPokemonDetails();
-  }, [number]);
+  }, [name]);
 
-  useEffect(() => {
-    const selectedPokemonString = localStorage.getItem('selectedPokemon');
-    const selectedPokemon = selectedPokemonString
-      ? JSON.parse(selectedPokemonString)
-      : [];
-    const isSelected = selectedPokemon.some((p) => p.number === number);
-    setSelected(isSelected);
-  }, [number]);
-
-  const handleToggleSelect = () => {
-    const selectedPokemonString = localStorage.getItem('selectedPokemon');
-    const selectedPokemon = selectedPokemonString
-      ? JSON.parse(selectedPokemonString)
-      : [];
-
-    if (selected) {
-      setSelected(false);
-      const updatedSelectedPokemon = selectedPokemon.filter(
-        (p) => p.number !== number
-      );
-      localStorage.setItem(
-        'selectedPokemon',
-        JSON.stringify(updatedSelectedPokemon)
-      );
-    } else if (selectedPokemon.length < 6) {
-      setSelected(true);
-      const updatedSelectedPokemon = [
-        ...selectedPokemon,
-        { name, number, imageUrl, id: Date.now() },
-      ];
-      localStorage.setItem(
-        'selectedPokemon',
-        JSON.stringify(updatedSelectedPokemon)
-      );
-    }
+  const handleToggleExpand = () => {
+    setExpanded(!expanded);
   };
 
   return (
-    <CardWrapper selected={selected} onClick={handleToggleSelect}>
+    <CardWrapper onClick={handleToggleExpand} expanded={expanded}>
       <PokemonImage imageUrl={imageUrl}>
         <Image
           src={imageUrl}
@@ -167,18 +158,50 @@ export default function PokemonCard({
           layout="fill"
           objectFit="contain"
           priority
+          sizes="(max-width: 300px) 100vw, 50vw"
         />
       </PokemonImage>
       <PokemonNumber>{`#${number}`}</PokemonNumber>
       <PokemonName>{name.charAt(0).toUpperCase() + name.slice(1)}</PokemonName>
-      <PokemonTypesWrapper>
-        {pokemonDetails &&
-          pokemonDetails.types.map((type) => (
-            <PokemonType key={type.type.name} type={type.type.name}>
-              {type.type.name}
-            </PokemonType>
-          ))}
-      </PokemonTypesWrapper>
+      {expanded && (
+        <PokemonDetails>
+          <PokemonDetailItem>
+            <strong>Type:</strong>
+            <PokemonTypesWrapper>
+              {pokemonDetails?.types.map((type) => (
+                <PokemonType key={type.type.name} type={type.type.name}>
+                  {type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1)}
+                </PokemonType>
+              ))}
+            </PokemonTypesWrapper>
+          </PokemonDetailItem>
+          <PokemonDetailItem>
+            <strong>Abilities:</strong>{' '}
+            {pokemonDetails?.abilities.map((ability) => (
+              <span key={ability.ability.name}>
+                {ability.ability.name.charAt(0).toUpperCase() + ability.ability.name.slice(1)}
+              </span>
+            ))}
+          </PokemonDetailItem>
+          <PokemonDetailItem>
+            <strong>Height:</strong> {pokemonDetails?.height}
+          </PokemonDetailItem>
+          <PokemonDetailItem>
+            <strong>Weight:</strong> {pokemonDetails?.weight}
+          </PokemonDetailItem>
+          <PokemonStats>
+            <strong>Base Stats:</strong>
+            {pokemonDetails?.stats.map((stat) => (
+              <PokemonStat key={stat.stat.name}>
+                <span>
+                  {stat.stat.name.charAt(0).toUpperCase() + stat.stat.name.slice(1)}:
+                </span>
+                <span>{stat.base_stat}</span>
+              </PokemonStat>
+            ))}
+          </PokemonStats>
+        </PokemonDetails>
+      )}
     </CardWrapper>
   );
-}
+};
