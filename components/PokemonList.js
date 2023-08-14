@@ -190,6 +190,7 @@ export default function PokemonList() {
     fetchPokemon();
   },);
 
+  
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
