@@ -23,12 +23,11 @@ const GridWrapper = styled.div`
 `;
 
 const SearchBar = styled.input`
-  width: 50vw;
+  width: 100%;
   padding: 12px;
-  font-size: 2vw;
-  border: 3px solid #ddd;
+  font-size: 3vw;
+  border: 1px solid #ddd;
   border-radius: 20px;
-  margin-bottom: 16px;
   display: block;
   margin: 0 auto;
   margin-bottom: 7%;
@@ -38,8 +37,13 @@ const SearchBar = styled.input`
   z-index: 1;
   box-shadow: 1px 5px 5px 1px rgba(0, 0, 0, 0.1);
 
+  &:active {
+    transform: scale(0.95);
+    box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 5);
+  }
+
   &:hover {
-    box-shadow: 1px 5px 5px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: -1px -2px -3px 5px rgba(5, 0, 0, 2);
     border: 3px solid lightgrey;
   }
 
@@ -58,15 +62,20 @@ const ScrollButtons = styled.button`
   background-color: transparent;
   color: black;
   border-radius: 20px;
-  
   cursor: pointer;
   font-size: 30px;
   background-color: #fff;
   border: 2px solid #ddd;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 2);
 
   &:hover {
-    transform: scale(1.1);
     transition: transform 0.1s ease;
+    background-color: #efefefef;
+  }
+
+  &:active {
+    transform: scale(0.95);
+    box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 100);
   }
 `;
 
@@ -75,12 +84,21 @@ const ScrollToTopButton = styled(ScrollButtons)`
   left: 20px;
   z-index: 10;
   display: ${(props) => (props.visible ? 'block' : 'none')};
+
+  &:hover {
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 2);
+  }
+
+  &:active {
+    box-shadow: inset 0px 2px 2px rgba(0, 0, 0, 100);
+  }
 `;
 
 const ScrollToBottomButton = styled(ScrollButtons)`
   bottom: 30px;
   right: 20px;
   z-index: 10;
+  transform: rotate(180deg);
   display: ${(props) =>
     props.visible &&
     props.scrollPosition > 0 &&
@@ -88,13 +106,24 @@ const ScrollToBottomButton = styled(ScrollButtons)`
       document.documentElement.scrollHeight - window.innerHeight
       ? 'block'
       : 'none'};
+
+  &:hover {
+    transform: rotate(180deg);
+    transition: transform 0.1s ease;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 2);
+
+    &:active {
+      transform: rotate (180deg) scale(0.95);
+      box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+  }
 `;
 
 const CompareButton = styled.button`
   display: flex;
   justify-content: space-around;
   position: fixed;
-  bottom: 5px; 
+  bottom: 5px;
   left: 0;
   right: 0;
   margin: auto;
@@ -105,21 +134,35 @@ const CompareButton = styled.button`
   padding: 10px;
   border-radius: 10px;
   cursor: pointer;
-
-
   transform: translateY(-30%);
 
+  @keyframes spin {
+    0% {
+      transform: translateY(-30%) rotate(0deg);
+    }
+
+    100% {
+      transform: translateY(-30%) rotate(360deg);
+    }
+  }
+
+  &:active {
+    transform: scale(0.9) translateY(-30%);
+    box-shadow: inset 2px 0px 0px 5px rgba(0, 0, 0, 100);
+    animation: spin 1s;
+  }
+
   &:hover {
-    box-shadow: 2px 3px 4px 5px rgba(5, 4, 2, 0.1);
+    background-color: red;
+    box-shadow: -1px -2px -3px rgba(5, 0, 0, 2);
     border-radius: 100%;
   }
 `;
 
 export const StyledImage = styled.img`
-width: 40px;
-height: 40px;
+  width: 40px;
+  height: 40px;
 `;
-
 
 export default function PokemonList() {
   const [pokemonData, setPokemonData] = useState([]);
@@ -136,12 +179,14 @@ export default function PokemonList() {
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
-        const data = await fetchPokemonData();
-        setPokemonData(data);
+        if (pokemonData.length === 0) {
+          const data = await fetchPokemonData();
+          setPokemonData(data);
+        }
       } catch (error) {
         console.error('Error fetching Pokemon data:', error);
       }
-    };
+    };    
     fetchPokemon();
   }, []);
 
@@ -149,7 +194,7 @@ export default function PokemonList() {
     const handleScroll = () => {
       const scrollY = window.scrollY;
 
-      if (scrollY > 300) {
+      if (scrollY > 100) {
         setShowScrollToTop(true);
       } else {
         setShowScrollToTop(false);
@@ -169,7 +214,7 @@ export default function PokemonList() {
       const scrollY = window.scrollY;
       const fullHeight = document.documentElement.scrollHeight;
 
-      if (fullHeight - scrollY - window.innerHeight > 300) {
+      if (fullHeight - scrollY - window.innerHeight > 100) {
         setShowScrollToBottom(true);
       } else {
         setShowScrollToBottom(false);
@@ -226,14 +271,14 @@ export default function PokemonList() {
         scrollPosition={scrollPosition}
         onClick={handleScrollToBottom}
       >
-        &#8681;
+        &#8679;
       </ScrollToBottomButton>
       <CompareButton onClick={handleCompareClick}>
-      <StyledImage alt='' src='/pokeball_emoji.png' />
+        <StyledImage alt="" src="/pokeball_emoji.png" />
       </CompareButton>
       <SearchBar
         type="text"
-        placeholder="Search for Pokémon..."
+        placeholder="Search for Pokémon... "
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />

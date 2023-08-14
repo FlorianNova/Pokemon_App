@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { compareTypes, getEffectivenessText } from './typeUtils'; 
-import {StyledImage} from './PokemonList';
-import {CloseButton} from './BattleSimulator';
+import { StyledImage } from './PokemonList';
+import { CloseButton } from './BattleSimulator';
+import { typeToColor } from './typeUtils';
 
 const PopupWrapper = styled.div`
   position: fixed;
@@ -29,21 +30,48 @@ const PopupContent = styled.div`
 `;
 
 const TypeComparison = ({ attackerType, defenderType, onClose }) => {
-  const formattedAttackerType = attackerType.charAt(0).toUpperCase() + attackerType.slice(1);
-  const formattedDefenderType = defenderType.charAt(0).toUpperCase() + defenderType.slice(1);
+  const formattedAttackerType =
+    attackerType.charAt(0).toUpperCase() + attackerType.slice(1);
+  const formattedDefenderType =
+    defenderType.charAt(0).toUpperCase() + defenderType.slice(1);
+
+  const AttackerTypeText = styled.span`
+    background-color: ${(props) => typeToColor[props.type]};
+    color: white;
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin: 1%;
+  `;
+
+  const DefenderTypeText = styled.span`
+    background-color: ${(props) => typeToColor[props.type]};
+    color: white;
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin: 50%;
+  `;
+
+  const VersusImage = styled.img`
+    margin: 4px;
+    width: 70%;
+  `;
 
   return (
     <PopupWrapper>
       <PopupContent>
-        <CloseButton onClick={onClose}>X</CloseButton>
-        <h3>{formattedAttackerType} <StyledImage alt='' src='/versus.png'/> {formattedDefenderType}:</h3>
-        <p>
+        <CloseButton onClick={onClose}> <StyledImage alt="" src="/leafeon.gif" /> </CloseButton>
+        <h3>
+          <AttackerTypeText type={attackerType}>{formattedAttackerType}</AttackerTypeText>
+          <VersusImage alt='' src='/versus.png'/>
+          <DefenderTypeText type={defenderType}>{formattedDefenderType}</DefenderTypeText>
+        </h3>
+        <div>
           {getEffectivenessText(
             compareTypes(attackerType, defenderType),
             formattedAttackerType,
             formattedDefenderType
           )}
-        </p>
+        </div>
       </PopupContent>
     </PopupWrapper>
   );

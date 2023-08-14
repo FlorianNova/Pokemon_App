@@ -142,12 +142,11 @@ export const calculateEffectiveness = (defendingType, attackingType) => {
     return effectiveness.notVeryEffective;
   } else if (types[defendingType].immune.includes(attackingType)) {
     return effectiveness.noEffect;
-  } else if (types[defendingType].normalEffective.includes(attackingType)) {
-    return effectiveness.normalEffective;
   } else {
     return effectiveness.normalEffective;
   }
 };
+
 
 export const compareTypes = (attackingType, defendingType) => {
   if (types[defendingType].weak.includes(attackingType)) {
@@ -171,35 +170,47 @@ export const getEffectivenessText = (
   const formattedDefendingType =
     defendingType.charAt(0).toUpperCase() + defendingType.slice(1);
 
+  const boldStyle = {
+    fontWeight: 'bold',
+  };
+
+  const attackingTypeColor = typeToColor[formattedAttackingType];
+  const defendingTypeColor = typeToColor[formattedDefendingType];
+
   if (effectivenessValue === effectiveness.veryEffective) {
     return (
       <p>
-        <strong>{formattedAttackingType} moves</strong> are{' '}
-        <strong>very effective</strong> against {formattedDefendingType}{' '}
-        Pokémon!
+        <strong style={{ ...boldStyle, color: attackingTypeColor }}>
+          {formattedAttackingType} moves are very effective against{' '}
+          <span style={{ color: defendingTypeColor }}>{formattedDefendingType}</span> Pokémon!
+        </strong>
       </p>
     );
   } else if (effectivenessValue === effectiveness.normalEffective) {
     return (
       <p>
-        <strong>{formattedAttackingType} moves</strong> are{' '}
-        <strong>normal effective</strong> against {formattedDefendingType}{' '}
-        Pokémon.
+        <strong style={{ ...boldStyle, color: attackingTypeColor }}>
+          {formattedAttackingType} moves having normal effective against{' '}
+          <span style={{ color: defendingTypeColor }}>{formattedDefendingType}</span> Pokémon.
+        </strong>
       </p>
     );
   } else if (effectivenessValue === effectiveness.notVeryEffective) {
     return (
       <p>
-        <strong>{formattedAttackingType} moves</strong> are{' '}
-        <strong>not very effective</strong> against {formattedDefendingType}{' '}
-        Pokémon...
+        <strong style={{ ...boldStyle, color: attackingTypeColor }}>
+          {formattedAttackingType} moves are not very effective against{' '}
+          <span style={{ color: defendingTypeColor }}>{formattedDefendingType}</span> Pokémon...
+        </strong>
       </p>
     );
   } else if (effectivenessValue === effectiveness.noEffect) {
     return (
       <p>
-        <strong>{formattedAttackingType} moves</strong> have{' '}
-        <strong>no effect</strong> against {formattedDefendingType} Pokémon!
+        <strong style={{ ...boldStyle, color: attackingTypeColor }}>
+          {formattedAttackingType} moves have no effect against{' '}
+          <span style={{ color: defendingTypeColor }}>{formattedDefendingType}</span> Pokémon!
+        </strong>
       </p>
     );
   }

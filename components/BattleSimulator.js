@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { typeToColor } from './typeUtils';
 import TypeComparison from './TypeComparison';
+import { StyledImage } from './PokemonList';
 
 const PopupWrapper = styled.div`
   position: fixed;
@@ -35,40 +36,19 @@ export const CloseButton = styled.button`
   top: 7px;
   right: 7px;
   background: none;
+  border: none;
   border-radius: 10px;
   cursor: pointer;
-  color: black;
-
-  
-  &:hover {
-    transition: transform 0.1s ease;
-    box-shadow: 2px 3px 4px 5px rgba(5, 4, 2, 0.1);
-    border: 3px solid red;
-    color: red;
-  }
-  &:focus {
-    transform: scale(0.8);
-  }
-`;
-
-const EffectivenessTextCloseButton = styled.button`
-  position: absolute;
-  font-size: 20px;
-  top: 7px;
-  right: 7px;
-  background: none;
-  border-radius: 10px;
-  cursor: pointer;
-  color: black;
 
   &:hover {
     transition: transform 0.1s ease;
-    box-shadow: 2px 3px 4px 5px rgba(5, 4, 2, 0.1);
-    border: 3px solid red;
-    color: red;
+    box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 1);
+    border: 1px;
+    background-image: url('/leafeon.gif'), no-repeat;
   }
-  &:focus {
-    transform: scale(0.8);
+  &:active {
+    transform: scale(0.95);
+    box-shadow: inset 5px 2px 5px rgba(0, 0, 0, 2);
   }
 `;
 
@@ -78,8 +58,8 @@ const TypeButton = styled.button`
     transition: transform 0.5s ease;
     box-shadow: 5px 5px 5px 1px rgba(0, 0, 0, 0.1);
   }
-  &:focus {
-    outline: 2px solid black;
+  &:active {
+    box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.3);
   }
   margin: 5px;
   padding: 10px;
@@ -125,8 +105,11 @@ export default function BattleSimulator({ handleModal }) {
       {!showComparisonPopup && (
         <PopupWrapper>
           <PopupContent>
-            <CloseButton onClick={() => handleModal()}>X</CloseButton>
-            <h2>Poké types</h2>
+            <CloseButton onClick={() => handleModal()}>
+              <StyledImage alt="" src="/vaporeon.gif" />
+            </CloseButton>
+            <StyledImage alt="" src="/pokeball_emoji.png" />{' '}
+            <StyledImage alt="" src="/pokedex.gif" />
             <p>Pick two types to see their effectiveness in a battle</p>
             <div>
               <TypeButton

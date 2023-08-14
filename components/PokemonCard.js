@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import styled, { css } from 'styled-components';
+import { useState, useEffect, } from 'react';
+import styled, { css, keyframes } from 'styled-components';
 import Image from "next/legacy/image";
 import { typeToColor } from './typeUtils';
 
@@ -30,15 +30,32 @@ const CardWrapper = styled.div`
       transition: transform 0.3s ease;
     `}
 
+
   &:hover {
     ${(props) =>
       !props.selected &&
       css`
-        box-shadow: 1px 10px 10px 1px rgba(0, 0, 0, 0.1);
+        box-shadow: -1px -2px 5px 1px rgba(0, 0, 0, 0.2);
         transform: scale(1.05);
         transition: transform 0.2s ease-in;
         cursor: pointer;
       `}
+  }
+
+  &:active {
+    box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.3);
+  }
+`;
+
+const pulseAnimation = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
   }
 `;
 
@@ -49,6 +66,7 @@ const PokemonImage = styled.div`
   border-radius: 80%;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 `;
+
 
 const PokemonNumber = styled.span`
   font-size: min(3vw, 20px);
@@ -152,7 +170,7 @@ export default function PokemonCard({
             <PokemonTypesWrapper>
               {pokemonDetails?.types.map((type) => (
                 <PokemonType key={type.type.name} type={type.type.name}>
-                  {type.type.name}
+                  {type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1)}
                 </PokemonType>
               ))}
             </PokemonTypesWrapper>
@@ -160,7 +178,9 @@ export default function PokemonCard({
           <PokemonDetailItem>
             <strong>Abilities:</strong>{' '}
             {pokemonDetails?.abilities.map((ability) => (
-              <span key={ability.ability.name}>{ability.ability.name}</span>
+              <span key={ability.ability.name}>
+                {ability.ability.name.charAt(0).toUpperCase() + ability.ability.name.slice(1)}
+              </span>
             ))}
           </PokemonDetailItem>
           <PokemonDetailItem>
@@ -173,7 +193,9 @@ export default function PokemonCard({
             <strong>Base Stats:</strong>
             {pokemonDetails?.stats.map((stat) => (
               <PokemonStat key={stat.stat.name}>
-                <span>{stat.stat.name}:</span>
+                <span>
+                  {stat.stat.name.charAt(0).toUpperCase() + stat.stat.name.slice(1)}:
+                </span>
                 <span>{stat.base_stat}</span>
               </PokemonStat>
             ))}
@@ -182,4 +204,4 @@ export default function PokemonCard({
       )}
     </CardWrapper>
   );
-}
+};
