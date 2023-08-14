@@ -108,9 +108,9 @@ export default function BattleSimulator({ handleModal }) {
             <CloseButton onClick={() => handleModal()}>
               <StyledImage alt="" src="/vaporeon.gif" />
             </CloseButton>
-            <StyledImage alt="" src="/pokeball_emoji.png" />{' '}
+            <StyledImage alt="" src="/pokeball_emoji.png" />
             <StyledImage alt="" src="/pokedex.gif" />
-            <p>Pick 2 types to see their effectiveness in a battle</p>
+            <p>Pick two types to see their effectiveness in a battle</p>
             <div>
               <TypeButton
                 type="normal"

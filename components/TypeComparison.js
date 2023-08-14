@@ -49,10 +49,11 @@ const TypeComparison = ({ attackerType, defenderType, onClose }) => {
     padding: 7px 10px;
     border-radius: 5px;
     margin: 50%;
+    right: auto;
   `;
 
   const VersusImage = styled.img`
-    margin: 4px;
+    margin: 20px;
     width: 70%;
   `;
 

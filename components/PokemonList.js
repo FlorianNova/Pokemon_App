@@ -66,7 +66,7 @@ const ScrollButtons = styled.button`
   font-size: 30px;
   background-color: #fff;
   border: 2px solid #ddd;
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 2);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
 
   &:hover {
     transition: transform 0.1s ease;
@@ -121,7 +121,7 @@ const ScrollToBottomButton = styled(ScrollButtons)`
 
 const CompareButton = styled.button`
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   position: fixed;
   bottom: 5px;
   left: 0;
