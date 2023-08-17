@@ -123,10 +123,11 @@ const CompareButton = styled.button`
   display: flex;
   justify-content: center;
   position: fixed;
+  width: fit-content;
   bottom: 5px;
   left: 0;
   right: 0;
-  margin: auto;
+  margin: 0 auto;
   z-index: 10;
   background-color: transparent;
   color: white;
@@ -155,7 +156,7 @@ const CompareButton = styled.button`
   &:hover {
     background-color: red;
     box-shadow: -1px -2px -3px rgba(5, 0, 0, 2);
-    border-radius: 100%;
+    border-radius: 50%;
   }
 `;
 
@@ -186,11 +187,10 @@ export default function PokemonList() {
       } catch (error) {
         console.error('Error fetching Pokemon data:', error);
       }
-    };    
+    };
     fetchPokemon();
-  },);
+  });
 
-  
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
