@@ -190,7 +190,7 @@ export const getEffectivenessText = (
     return (
       <p>
         <strong style={{ ...boldStyle, color: attackingTypeColor }}>
-          {formattedAttackingType} moves having normal effective against{' '}
+          {formattedAttackingType} moves are normally effective against{' '}
           <span style={{ color: defendingTypeColor }}>{formattedDefendingType}</span> Pokémon.
         </strong>
       </p>
